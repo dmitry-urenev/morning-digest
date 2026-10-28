@@ -1,0 +1,787 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="color-scheme" content="light dark">
+<title>Дайджест · 28.10</title>
+<style>
+  :root {
+    --bg: #fbfaf7;
+    --text: #1d1d1b;
+    --muted: #6b6963;
+    --faint: #9a978f;
+    --rule: #e6e3dc;
+    --tint: #f2f0ea;
+    --accent: #2f5bd3;
+    --pos: #16794a;
+    --neg: #b42323;
+    --mix: #9a6100;
+    --high: #c62828;
+    --med: #c98a00;
+    --low: #9aa1ab;
+    --estimate: #6b5fd0;
+    --font: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    --mono: ui-monospace, "SF Mono", "JetBrains Mono", Menlo, Consolas, monospace;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg: #1d1f20;
+      --text: #e8e6e1;
+      --muted: #a09e98;
+      --faint: #74726d;
+      --rule: #2b2d30;
+      --tint: #1d1f21;
+      --accent: #8aa6ff;
+      --pos: #4cc58a;
+      --neg: #f07070;
+      --mix: #e3b04b;
+      --high: #f06262;
+      --med: #e3b04b;
+      --low: #6f7680;
+      --estimate: #a89ff2;
+    }
+  }
+
+  * { box-sizing: border-box; }
+  html { scroll-behavior: smooth; scroll-padding-top: 56px; }
+  body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--text);
+    font: 16px/1.6 var(--font);
+    -webkit-text-size-adjust: 100%;
+  }
+  a { color: var(--accent); text-decoration: none; }
+  a:hover { text-decoration: underline; }
+  .wrap { max-width: 760px; margin: 0 auto; padding: 0 20px; }
+  .num { font-family: var(--mono); font-variant-numeric: tabular-nums; }
+
+  /* Masthead */
+  .masthead { padding-top: 40px; padding-bottom: 8px; }
+  .masthead .kicker { font-size: 12.5px; letter-spacing: .08em; text-transform: uppercase; color: var(--muted); }
+  .masthead h1 { margin: 4px 0 6px; font-size: 32px; line-height: 1.2; letter-spacing: -.01em; }
+  .masthead .meta { display: flex; flex-wrap: wrap; column-gap: 16px; row-gap: 2px; color: var(--muted); font-size: 14px; }
+  .lede { margin: 18px 0 0; font-size: 19px; line-height: 1.5; }
+
+  /* Section nav */
+  nav.toc {
+    position: sticky; top: 0; z-index: 5;
+    background: color-mix(in srgb, var(--bg) 92%, transparent);
+    backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px);
+  }
+  nav.toc .wrap { display: flex; gap: 18px; overflow-x: auto; padding-top: 12px; padding-bottom: 12px; scrollbar-width: none; }
+  nav.toc .wrap::-webkit-scrollbar { display: none; }
+  nav.toc a { flex: none; font-size: 13.5px; color: var(--muted); }
+  nav.toc a:hover { color: var(--text); text-decoration: none; }
+
+  /* Sections */
+  section { padding: 36px 0 4px; }
+  section > h2 {
+    display: flex; align-items: baseline; gap: 10px;
+    margin: 0 0 6px -46px; font-size: 28px; font-weight: 400; color: var(--muted);
+  }
+  section > h2 .n { color: var(--rule); font-family: var(--mono); font-weight: 400; }
+  h3.subhead { margin: 22px 0 0; font-size: 18px; text-transform: uppercase; font-weight: 400; color: var(--muted); }
+  .empty { color: var(--muted); font-style: italic; margin: 8px 0 0; }
+  .note { font-size: 13px; color: var(--muted); margin: 10px 0 0; }
+
+  /* Story items: separated by whitespace and a hairline, no boxes */
+  .card { padding: 18px 0; border-bottom: 1px solid var(--rule); }
+  .card:last-child { border-bottom: none; }
+  .card h4 { margin: 0 0 6px; font-size: 18px; line-height: 1.35; }
+  .card h4 a { color: var(--text); }
+  .card h4 a:hover { color: var(--accent); }
+  .card p { margin: 8px 0 0; }
+  .card .src { margin-top: 8px; font-size: 13px; color: var(--muted); }
+  .card .src a { word-break: break-word; }
+
+  /* Chips are plain inline labels; colour carries the value */
+  .tags { display: flex; flex-wrap: wrap; gap: 2px 14px; font-size: 13px; line-height: 18px; color: var(--muted); margin-bottom: 18px; }
+  .tag { color: var(--muted); }
+  .tag.is-high, .tag.is-medium, .tag.is-low, .tag.is-confirmed, .tag.is-reported, .tag.is-rumor { white-space: nowrap; }
+  .tag b { font-weight: 500; color: var(--text); }
+  .tag.is-high, .tag.is-medium, .tag.is-low { font-weight: 600; color: var(--text); }
+  .tag.is-high::before, .tag.is-medium::before, .tag.is-low::before {
+    content: ""; display: inline-block; width: 8px; height: 8px; border-radius: 50%; margin-right: 6px; vertical-align: 1px;
+  }
+  .tag.is-high::before { background: var(--high); }
+  .tag.is-medium::before { background: var(--med); }
+  .tag.is-low::before { background: var(--low); }
+  .tag.is-positive { color: var(--pos); }
+  .tag.is-negative { color: var(--neg); }
+  .tag.is-mixed { color: var(--mix); }
+  .tag.is-reported { color: var(--mix); font-style: italic; }
+  .tag.is-rumor { color: var(--neg); font-style: italic; }
+  .tag.is-against-trend { color: var(--mix); }
+  .tag.shift.is-up::before { content: "▲ "; font-size: 10px; }
+  .tag.shift.is-down::before { content: "▼ "; font-size: 10px; }
+  .tag.shift.is-flat::before { content: "● "; font-size: 8px; vertical-align: 1px; }
+
+  .estimate { margin: 16px 0; }
+  .estimate .label {
+    display: block; font-size: 11px; letter-spacing: .07em; text-transform: uppercase;
+    color: var(--estimate); font-weight: 700;
+  }
+  .estimate p { margin: 2px 0 0; }
+
+  /* Top stories: linked contents list */
+  ul.top { list-style: none; margin: 0; padding: 0; }
+  ul.top > li {
+    display: flex; align-items: baseline; gap: 12px;
+    padding: 10px 0; border-bottom: 1px solid var(--rule);
+  }
+  ul.top > li:last-child { border-bottom: none; }
+  ul.top > li::before {
+    content: ""; flex: none; width: 8px; height: 8px; border-radius: 50%; background: var(--low);
+    transform: translateY(-2px);
+  }
+  ul.top > li.is-high::before { background: var(--high); }
+  ul.top > li.is-medium::before { background: var(--med); }
+  ul.top .headline { flex: 1; font-weight: 600; font-size: 16.5px; line-height: 1.4; }
+  ul.top .headline a { color: var(--text); }
+  ul.top .headline a:hover { color: var(--accent); }
+  ul.top .where { display: block; font-size: 13px; font-weight: 400; color: var(--muted); }
+  ul.top .tag { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+
+  /* Jump target from the contents list */
+  .card:target, tr:target > td, li:target { animation: target-flash 2.4s ease-out; }
+  @keyframes target-flash {
+    from { background: color-mix(in srgb, var(--accent) 16%, var(--bg)); }
+  }
+
+  /* Today's focus */
+  .card.is-preview { margin-top: 14px; padding: 18px 20px; background: var(--tint); border-bottom: none; border-radius: 6px; }
+  .card .kicker {
+    display: block; font-size: 11px; letter-spacing: .07em; text-transform: uppercase;
+    color: var(--accent); font-weight: 700; margin-bottom: 4px;
+  }
+  .card dl { display: grid; grid-template-columns: 120px 1fr; gap: 4px 14px; margin: 10px 0 0; }
+  .card dt { color: var(--muted); font-size: 14px; }
+  .card dd { margin: 0; }
+
+  /* Markets strip */
+  .markets {
+    display: grid; grid-template-columns: repeat(auto-fill, minmax(130px, 1fr)); gap: 18px 20px; margin-top: 14px;
+  }
+  .tile .name { font-size: 12.5px; color: var(--muted); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .tile .value { font: 600 20px/1.3 var(--mono); font-variant-numeric: tabular-nums; }
+  .tile .chg { font: 500 13px/1.4 var(--mono); font-variant-numeric: tabular-nums; }
+  .tile .asof { font-size: 11.5px; color: var(--faint); }
+  .tile.is-up .chg { color: var(--pos); }
+  .tile.is-up .chg::before { content: "▲ "; font-size: 10px; }
+  .tile.is-down .chg { color: var(--neg); }
+  .tile.is-down .chg::before { content: "▼ "; font-size: 10px; }
+  .tile.is-flat .chg { color: var(--muted); }
+  .tile.is-flat .chg::before { content: "● "; font-size: 8px; vertical-align: 2px; }
+
+  /* Data table */
+  .table-scroll { overflow-x: auto; margin-top: 8px; }
+  table.data { width: 100%; border-collapse: collapse; font-size: 14.5px; min-width: 600px; }
+  table.data th, table.data td { padding: 10px 10px 10px 0; text-align: left; border-bottom: 1px solid var(--rule); vertical-align: top; }
+  table.data tr:last-child td { border-bottom: none; }
+  table.data th { font-size: 11.5px; font-weight: 600; color: var(--muted); text-transform: uppercase; letter-spacing: .05em; }
+  table.data td.r, table.data th.r { text-align: right; padding-right: 16px; }
+  table.data td.num { white-space: nowrap; }
+  table.data .actual { font-weight: 700; }
+  table.data .what { font-weight: 600; }
+  table.data .what small { display: block; font-weight: 400; color: var(--muted); }
+  table.data td small.rev { display: block; font-size: 11.5px; color: var(--muted); font-family: var(--font); }
+  table.data td .tag { font-size: 13px; }
+  .flag { font-size: 13px; font-weight: 600; white-space: nowrap; }
+  .flag.is-inline { color: var(--muted); font-weight: 500; }
+
+  /* Regional roundup */
+  .region { display: grid; grid-template-columns: 120px 1fr; gap: 14px; padding: 14px 0; border-bottom: 1px solid var(--rule); }
+  .region:last-child { border-bottom: none; }
+  .region .rname { font-weight: 600; }
+  .region ul { margin: 0; padding-left: 18px; }
+  .region li + li { margin-top: 4px; }
+
+  /* Big picture */
+  .bigpicture { margin-top: 12px; padding-left: 16px; border-left: 2px solid var(--estimate); }
+  .bigpicture .label { font-size: 11px; letter-spacing: .07em; text-transform: uppercase; color: var(--estimate); font-weight: 700; }
+  .bigpicture p { margin: 4px 0 0; font-size: 17.5px; line-height: 1.55; }
+  .shifts { display: flex; flex-wrap: wrap; gap: 4px 18px; margin-top: 10px; font-size: 13.5px; }
+  .shifts .tag { color: var(--text); }
+
+  /* Outlook */
+  .day h3 { margin: 22px 0 2px; font-size: 13px; color: var(--muted); font-weight: 700; text-transform: uppercase; letter-spacing: .06em; }
+  ul.events { list-style: none; margin: 0; padding: 0; }
+  ul.events li { display: grid; grid-template-columns: 76px 1fr; gap: 12px; padding: 10px 0; border-bottom: 1px solid var(--rule); }
+  ul.events li:last-child { border-bottom: none; }
+  ul.events .time { font: 600 14px/1.55 var(--mono); color: var(--muted); }
+  ul.events .time.is-session { font: 600 12.5px/1.4 var(--font); padding-top: 2px; }
+  ul.events .ev { font-weight: 600; }
+  ul.events .cons { font-size: 13.5px; color: var(--muted); }
+  ul.events .why { font-size: 14.5px; margin-top: 2px; }
+  ul.events li.is-key .time { color: var(--high); }
+  ul.events li.is-key .ev::after {
+    content: "Ключевое"; margin-left: 8px; font-size: 10.5px; font-weight: 700; letter-spacing: .06em;
+    text-transform: uppercase; color: var(--high); vertical-align: 1px;
+  }
+
+  footer { margin-top: 40px; margin-bottom: 48px; padding-top: 14px; border-top: 1px solid var(--rule); font-size: 13px; color: var(--muted); }
+  footer p { margin: 4px 0; }
+
+  /* Hanging section numbers need room left of the column; pull them in on narrower screens */
+  @media (max-width: 860px) {
+    section > h2 { margin-left: 0; }
+  }
+  @media (max-width: 600px) {
+    body { font-size: 15.5px; }
+    .wrap { padding: 0 16px; }
+    .masthead { padding-top: 28px; }
+    .masthead h1 { font-size: 26px; }
+    .lede { font-size: 17.5px; }
+    .region { grid-template-columns: 1fr; gap: 4px; }
+    .card dl { grid-template-columns: 1fr; gap: 0; }
+    .card dd { margin-bottom: 6px; }
+    .markets { grid-template-columns: repeat(2, 1fr); }
+    ul.events li { grid-template-columns: 64px 1fr; }
+  }
+  @media print {
+    nav.toc { display: none; }
+    body { background: #fff; }
+    .card, ul.top > li, .tile, .region, ul.events li { break-inside: avoid; }
+  }
+</style>
+</head>
+<body>
+
+<header class="masthead wrap">
+  <div class="kicker">Макро и рынки · утренний дайджест</div>
+  <h1>Среда, 28 октября 2026</h1>
+  <div class="meta">
+    <span>Период: 27.10, 06:30 — 28.10, 18:19</span>
+    <span>Подготовлено 18:19 по Берлину</span>
+  </div>
+  <p class="lede">Энергетический шок продолжает толкать центробанки к ужесточению: Brent держится около 115 $, Банк Канады впервые с 2023 года повысил ставку, а доходность 10-летних UST поднялась выше 5%. В 19:00 ФРС, как ожидается, сохранит ставку 3,75–4,00% — рынок ждёт от Уорша сигнала о повышении в декабре.</p>
+</header>
+
+<nav class="toc" aria-label="Разделы">
+  <div class="wrap">
+    <a href="#top-stories">Главное</a>
+    <a href="#markets">Рынки</a>
+    <a href="#data">Данные</a>
+    <a href="#policy">Макро и политика</a>
+    <a href="#companies">Компании</a>
+    <a href="#regions">Регионы</a>
+    <a href="#big-picture">Общая картина</a>
+    <a href="#outlook">Календарь</a>
+  </div>
+</nav>
+
+<main class="wrap">
+
+  <section id="top-stories">
+    <h2><span class="n">01</span>Главное</h2>
+    <ul class="top">
+      <li class="is-high">
+        <div class="headline"><a href="#fed-decision">ФРС в 19:00: пауза при 3,75–4,00% в цене, рынок ждёт сигнала Уорша о декабре</a><span class="where">Сегодня в фокусе</span></div>
+        <span class="tag is-high">высокое</span>
+      </li>
+      <li class="is-high">
+        <div class="headline"><a href="#oil-gulf">Brent у 115 $: сообщения о подготовке США к новой кампании против Ирана, атаки хуситов на Саудовскую Аравию</a><span class="where">Энергетика и сырьё</span></div>
+        <span class="tag is-high">высокое</span>
+      </li>
+      <li class="is-high">
+        <div class="headline"><a href="#sk-hynix-q3">SK Hynix: рекордная операционная прибыль, DRAM и HBM распроданы до 2029 года; KOSPI +6,6%</a><span class="where">Полупроводники</span></div>
+        <span class="tag is-high">высокое</span>
+      </li>
+      <li class="is-medium">
+        <div class="headline"><a href="#boc-hike">Банк Канады повысил ставку до 2,5% — первое повышение с 2023 года из-за энергетической инфляции</a><span class="where">Центробанки</span></div>
+        <span class="tag is-medium">среднее</span>
+      </li>
+      <li class="is-medium">
+        <div class="headline"><a href="#uk-budget">Бюджет Хили без сюрпризов: запас 15 млрд £, гилты немного подросли</a><span class="where">Фискальная политика и долг</span></div>
+        <span class="tag is-medium">среднее</span>
+      </li>
+      <li class="is-medium">
+        <div class="headline"><a href="#au-cpi">Инфляция в Австралии ускорилась до 4,3% — выше консенсуса, растут ставки на повышение РБА</a><span class="where">Данные · Австралия</span></div>
+        <span class="tag is-medium">среднее</span>
+      </li>
+      <li class="is-medium">
+        <div class="headline"><a href="#rbnz-hold">РБНЗ неожиданно сохранил ставку 2,75% при голосовании 4–3, новозеландский доллар упал</a><span class="where">Центробанки</span></div>
+        <span class="tag is-medium">среднее</span>
+      </li>
+    </ul>
+  </section>
+
+  <section id="markets">
+    <h2><span class="n">02</span>Рынки</h2>
+    <div class="markets">
+      <div class="tile is-up">
+        <div class="name">US 10y</div>
+        <div class="value">5,03%</div>
+        <div class="chg">+3 б.п.</div>
+        <div class="asof">28.10, внутри дня</div>
+      </div>
+      <div class="tile is-up">
+        <div class="name">Bund 10y</div>
+        <div class="value">3,37%</div>
+        <div class="chg">+2 б.п.</div>
+        <div class="asof">28.10, внутри дня</div>
+      </div>
+      <div class="tile is-down">
+        <div class="name">Гилты 10y</div>
+        <div class="value">5,321%</div>
+        <div class="chg">−2,1 б.п.</div>
+        <div class="asof">28.10, внутри дня</div>
+      </div>
+      <div class="tile is-flat">
+        <div class="name">EUR/USD</div>
+        <div class="value">1,1134</div>
+        <div class="chg">−0,04%</div>
+        <div class="asof">28.10, 14:30</div>
+      </div>
+      <div class="tile is-up">
+        <div class="name">Brent</div>
+        <div class="value">115,23 $</div>
+        <div class="chg">+1,2%</div>
+        <div class="asof">28.10, 14:30</div>
+      </div>
+      <div class="tile is-down">
+        <div class="name">Золото (фьюч. COMEX)</div>
+        <div class="value">4 052,40 $</div>
+        <div class="chg">−0,54%</div>
+        <div class="asof">28.10, внутри дня</div>
+      </div>
+      <div class="tile is-up">
+        <div class="name">S&amp;P 500</div>
+        <div class="value">7 743,10</div>
+        <div class="chg">+0,27%</div>
+        <div class="asof">28.10, внутри дня</div>
+      </div>
+      <div class="tile is-up">
+        <div class="name">Nasdaq Composite</div>
+        <div class="value">26 501,13</div>
+        <div class="chg">+0,09%</div>
+        <div class="asof">28.10, внутри дня</div>
+      </div>
+      <div class="tile is-up">
+        <div class="name">Euro Stoxx 50</div>
+        <div class="value">6 179,30</div>
+        <div class="chg">+0,24%</div>
+        <div class="asof">закр. 28.10</div>
+      </div>
+      <div class="tile is-up">
+        <div class="name">DAX</div>
+        <div class="value">25 732</div>
+        <div class="chg">+0,50%</div>
+        <div class="asof">28.10, 18:05</div>
+      </div>
+      <div class="tile is-up">
+        <div class="name">Nikkei 225</div>
+        <div class="value">63 954,19</div>
+        <div class="chg">+1,1%</div>
+        <div class="asof">закр. 28.10</div>
+      </div>
+      <div class="tile is-up">
+        <div class="name">KOSPI</div>
+        <div class="value">6 012,44</div>
+        <div class="chg">+6,6%</div>
+        <div class="asof">закр. 28.10</div>
+      </div>
+      <div class="tile is-up">
+        <div class="name">Hang Seng</div>
+        <div class="value">23 094,83</div>
+        <div class="chg">+0,2%</div>
+        <div class="asof">закр. 28.10</div>
+      </div>
+      <div class="tile is-up">
+        <div class="name">Shanghai Composite</div>
+        <div class="value">3 681,47</div>
+        <div class="chg">+0,9%</div>
+        <div class="asof">закр. 28.10</div>
+      </div>
+      <div class="tile is-down">
+        <div class="name">VIX</div>
+        <div class="value">17,36</div>
+        <div class="chg">−0,91%</div>
+        <div class="asof">28.10, внутри дня</div>
+      </div>
+    </div>
+    <p class="note">Источники: <a href="https://finance.yahoo.com/markets/live/stock-market-today-wednesday-october-28-dow-sp-500-nasdaq-fed-meeting-decision-big-tech-earnings-130508769.html" target="_blank" rel="noopener">Yahoo Finance</a> (US 10y, золото, S&amp;P 500, Nasdaq, VIX), <a href="https://tradingeconomics.com/germany/government-bond-yield" target="_blank" rel="noopener">Trading Economics</a> (Bund, <a href="https://tradingeconomics.com/euro-area/stock-market" target="_blank" rel="noopener">Euro Stoxx 50</a>), <a href="https://www.marketscreener.com/news/gilt-yields-ease-sterling-falls-slightly-in-muted-reaction-to-u-k-budget-update-ce785cd2de8ff526" target="_blank" rel="noopener">Dow Jones / Tradeweb</a> (гилты), <a href="https://www.boerse.de/indizes/Dax/DE0008469008" target="_blank" rel="noopener">boerse.de</a> (DAX, индикатив), <a href="https://uk.finance.yahoo.com/news/tech-stocks-soar-sk-hynix-024123791.html" target="_blank" rel="noopener">AFP</a> (EUR/USD, Brent, Азия)</p>
+  </section>
+
+  <section id="data">
+    <h2><span class="n">03</span>Вышедшие данные</h2>
+    <div class="table-scroll">
+      <table class="data">
+        <thead>
+          <tr>
+            <th>Показатель</th>
+            <th class="r">Факт</th>
+            <th class="r">Консенсус</th>
+            <th class="r">Пред.</th>
+            <th>Сюрприз</th>
+            <th>Влияние</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr id="au-cpi">
+            <td class="what"><a href="https://www.abs.gov.au/media-centre/media-releases/cpi-rose-43-year-september-2026" target="_blank" rel="noopener">AU · ИПЦ, г/г</a><small>сентябрь, месячный · 01:30</small></td>
+            <td class="r num actual">4,3%</td>
+            <td class="r num">4,2%</td>
+            <td class="r num">4,0%</td>
+            <td><span class="flag is-above">▲ Выше</span></td>
+            <td><span class="tag is-medium">среднее</span></td>
+          </tr>
+          <tr id="us-conf-board">
+            <td class="what"><a href="https://www.conference-board.org/topics/consumer-confidence" target="_blank" rel="noopener">US · Индекс Conference Board</a><small>октябрь · 27.10, 15:00</small></td>
+            <td class="r num actual">91,7</td>
+            <td class="r num">81,0</td>
+            <td class="r num">84,2<small class="rev">пересм.</small></td>
+            <td><span class="flag is-above">▲ Выше</span></td>
+            <td><span class="tag is-medium">среднее</span></td>
+          </tr>
+          <tr id="us-goods-trade">
+            <td class="what"><a href="https://www.ttnews.com/articles/trade-gap-september-2026" target="_blank" rel="noopener">US · Торговый баланс товаров, млрд $</a><small>сентябрь, предв. · 13:30</small></td>
+            <td class="r num actual">−134,9</td>
+            <td class="r num">−130,2</td>
+            <td class="r num">−132,1</td>
+            <td><span class="flag is-below">▼ Ниже</span></td>
+            <td><span class="tag is-low">низкое</span></td>
+          </tr>
+          <tr id="us-durables">
+            <td class="what"><a href="https://tradingeconomics.com/united-states/durable-goods-orders" target="_blank" rel="noopener">US · Заказы на товары длит. пользования</a><small>сентябрь, м/м · 27.10, 13:30</small></td>
+            <td class="r num actual">+1,8%</td>
+            <td class="r num">+1,5%</td>
+            <td class="r num">+0,1%<small class="rev">пересм. с 0,0%</small></td>
+            <td><span class="flag is-above">▲ Выше</span></td>
+            <td><span class="tag is-low">низкое</span></td>
+          </tr>
+          <tr id="us-new-homes">
+            <td class="what"><a href="https://tradingeconomics.com/united-states/new-home-sales" target="_blank" rel="noopener">US · Продажи новых домов, тыс.</a><small>сентябрь · 27.10, 15:00</small></td>
+            <td class="r num actual">676</td>
+            <td class="r num">650</td>
+            <td class="r num">680<small class="rev">пересм. с 684</small></td>
+            <td><span class="flag is-above">▲ Выше</span></td>
+            <td><span class="tag is-low">низкое</span></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <p class="note">Австралия: усечённое среднее 3,6% г/г (пред. 3,5%, пересм. с 3,6%), ИПЦ за III квартал +1,3% кв/кв, топливо за год +9,4%. Консенсусы: ИПЦ Австралии — <a href="https://www.fxstreet.com/news/australia-cpi-expected-to-rise-to-42-in-september-202610272030" target="_blank" rel="noopener">FXStreet</a>, торговый баланс — опрос Bloomberg, Conference Board — Reuters (<a href="https://newsbusters.org/blogs/cnsnews/craig-bannister/2026/10/27/consumer-confidence-jumps-october-defying-economists" target="_blank" rel="noopener">CNS News</a>), заказы и продажи домов — Trading Economics. <a href="https://www.abs.gov.au/media-centre/media-releases/cpi-rose-43-year-september-2026" target="_blank" rel="noopener">↗</a></p>
+  </section>
+
+  <section id="policy">
+    <h2><span class="n">04</span>Макро и политика</h2>
+
+    <article class="card is-preview" id="fed-decision">
+      <span class="kicker">Сегодня в фокусе · 19:00</span>
+      <h4><a href="https://www.federalreserve.gov/monetarypolicy/fomccalendars.htm" target="_blank" rel="noopener">ФРС: решение по ставке, в 19:30 — пресс-конференция Кевина Уорша</a></h4>
+      <div class="tags">
+        <span class="tag is-high">Влияние: высокое</span>
+      </div>
+      <dl>
+        <dt>Ожидания</dt><dd>Сохранение диапазона 3,75–4,00% после повышения на 25 б.п. 16.09: 94 из 100 экономистов в опросе Reuters ждут паузы, фьючерсы CME дают около 10% за повышение сегодня. Доходность 10-летних UST — 5,03%.</dd>
+        <dt>Что удивит</dt><dd>Повышение на 25 б.п.; прямой сигнал о повышении в декабре в заявлении или от Уорша; в другую сторону — акцент на рисках для роста и сигнал о длительной паузе.</dd>
+      </dl>
+      <div class="estimate">
+        <span class="label">Оценка · реакция рынка</span>
+        <p>Пауза в цене, поэтому рынок будет торговать тон заявления и пресс-конференции. Ястребиный сигнал при Brent около 115 $ закрепит доходности UST выше 5% и укрепит доллар, что ударит по оценкам техсектора за пару часов до отчётов Microsoft и Alphabet; мягкий тон снизит доходности и поддержит валюты EM.</p>
+      </div>
+      <div class="src">Источник: <a href="https://www.federalreserve.gov/monetarypolicy/fomccalendars.htm" target="_blank" rel="noopener">Федеральная резервная система</a>, <a href="https://www.newsquawk.com/headlines/week-in-focus-26-30th-october-2026-fomc-boc-rbnz-ecb-boj-policy-decisions-us-pce" target="_blank" rel="noopener">Newsquawk (опрос Reuters, CME)</a></div>
+    </article>
+
+    <h3 class="subhead">Энергетика и сырьё</h3>
+    <article class="card is-high" id="oil-gulf">
+      <h4><a href="https://www.thenationalnews.com/business/energy/2026/10/28/oil-prices-up-due-to-houthi-strikes-and-us-threat-to-renew-iran-war/" target="_blank" rel="noopener">Brent у 115 $: США, по данным WSJ, готовят союзников к новой кампании против Ирана, хуситы атакуют Саудовскую Аравию</a></h4>
+      <div class="tags">
+        <span class="tag is-high">Влияние: высокое</span>
+        <span class="tag is-mixed">Смешанно: + нефтяники, − импортёры нефти</span>
+        <span class="tag">Масштаб: <b>Глобально</b></span>
+        <span class="tag">Сюрприз: <b>частично, риски Залива в цене</b></span>
+        <span class="tag is-confirmed">Подтверждено</span>
+      </div>
+      <p class="facts">Brent к 14:30 подорожала на 1,2% до 115,23 $, WTI — на 1,9% до 101,76 $; во вторник Brent снизилась примерно на 1,6% на надеждах на переговоры. Вашингтон предупредил ряд арабских стран Залива о возможной возобновлённой военной кампании против Ирана после промежуточных выборов 3 ноября (по данным СМИ, WSJ). Катарские посредники передали Ирану новый проект соглашения о прекращении войны; Тегеран его рассматривает и ответит к концу недели (по данным СМИ, Reuters). Коалиция во главе с Саудовской Аравией сообщила о перехвате баллистической ракеты хуситов, нацеленной на Таиф; заявления хуситов об ударах по аэропорту Абхи и НПЗ Рас-Танура (не подтверждено). UBS ждёт Brent около 110 $ до конца года.</p>
+      <div class="estimate">
+        <span class="label">Оценка · последствия</span>
+        <p>Нефть выше 110 $ уже переходит в инфляцию (топливо в австралийском ИПЦ) и в решения ЦБ (Канада), поэтому риск войны после 3 ноября сохраняет премию в цене и поддерживает сценарий «ставки выше дольше». Для импортёров в Европе и Азии это ухудшение торгового баланса и давление на валюты; для экспортёров Залива и нефтяных компаний — дополнительная выручка, пока поставки не прерваны.</p>
+      </div>
+      <div class="src">Источник: <a href="https://www.thenationalnews.com/business/energy/2026/10/28/oil-prices-up-due-to-houthi-strikes-and-us-threat-to-renew-iran-war/" target="_blank" rel="noopener">The National</a>, <a href="https://uk.finance.yahoo.com/news/tech-stocks-soar-sk-hynix-024123791.html" target="_blank" rel="noopener">AFP</a></div>
+    </article>
+
+    <h3 class="subhead">Центробанки</h3>
+    <article class="card is-medium" id="boc-hike">
+      <h4><a href="https://www.bankofcanada.ca/2026/10/fad-press-release-2026-10-28/" target="_blank" rel="noopener">Банк Канады повысил ставку на 25 б.п. до 2,5% — первое повышение с 2023 года</a></h4>
+      <div class="tags">
+        <span class="tag is-medium">Влияние: среднее</span>
+        <span class="tag is-mixed">Смешанно: + CAD, − заёмщики Канады</span>
+        <span class="tag">Масштаб: <b>Страна</b></span>
+        <span class="tag">Сюрприз: <b>нет, в цене</b></span>
+        <span class="tag is-confirmed">Подтверждено</span>
+      </div>
+      <p class="facts">В 14:45 Банк Канады поднял целевую ставку овернайт до 2,5% (Bank Rate 2,75%, депозитная 2,45%). Инфляция выше и устойчивее, чем в июльском прогнозе: ИПЦ около 3% с апреля, к концу года ожидается около 3,5%, в среднем 3% в 2027 году, возврат к 2% — около середины 2028 года; базовые показатели близки к 2%. Прогноз роста ВВП: 1% в 2026 году, 2% в 2027–2028 годах. «Может потребоваться дальнейшее повышение ставки». Перед решением рынки закладывали около 80% за повышение. Следующее решение — 9.12.</p>
+      <div class="estimate">
+        <span class="label">Оценка · последствия</span>
+        <p>Повышение при ядровой инфляции около цели показывает, что ЦБ готовы гасить вторичные эффекты дорогой энергии даже ценой роста: подорожают ипотека с плавающей ставкой и кредиты бизнесу, а рост в 1% оставляет мало запаса. Для рынков это ориентир перед ФРС и ЕЦБ: аргумент за жёсткую риторику, поддержка канадского доллара и доходностей.</p>
+      </div>
+      <div class="src">Источник: <a href="https://www.bankofcanada.ca/2026/10/fad-press-release-2026-10-28/" target="_blank" rel="noopener">Bank of Canada</a>, <a href="https://www.newsquawk.com/headlines/week-in-focus-26-30th-october-2026-fomc-boc-rbnz-ecb-boj-policy-decisions-us-pce" target="_blank" rel="noopener">Newsquawk</a></div>
+    </article>
+    <article class="card is-medium" id="rbnz-hold">
+      <h4><a href="https://in.investing.com/news/economy-news/rbnz-holds-rates-at-275-in-split-vote-signals-further-hikes-likely-5658560" target="_blank" rel="noopener">РБНЗ неожиданно сохранил ставку 2,75% при голосовании 4–3, но обещает новые повышения</a></h4>
+      <div class="tags">
+        <span class="tag is-medium">Влияние: среднее</span>
+        <span class="tag is-mixed">Смешанно: + заёмщики, − NZD</span>
+        <span class="tag">Масштаб: <b>Страна</b></span>
+        <span class="tag">Сюрприз: <b>да, ждали повышения</b></span>
+        <span class="tag is-confirmed">Подтверждено</span>
+      </div>
+      <p class="facts">В 02:00 Резервный банк Новой Зеландии оставил OCR на 2,75%: четверо членов комитета (включая управляющую Анну Бреман) голосовали за паузу, трое — за повышение до 3,00%. В опросе Reuters 22 из 27 экономистов ждали повышения на 25 б.п. Инфляция в III квартале замедлилась до 3,7% г/г с 4,1%; Бреман заявила, что комитет ожидает дальнейших повышений в ближайшие месяцы. NZD/USD опустился ниже 0,5600.</p>
+      <div class="estimate">
+        <span class="label">Оценка · последствия</span>
+        <p>Пауза смягчает финансовые условия и ослабляет валюту, но обещание повышений удерживает ипотечные ставки высокими. Раскол 4–3 показывает, что ЦБ по-разному оценивают энергетическую инфляцию: замедление ИПЦ даёт РБНЗ время, тогда как Канада и, вероятно, Австралия действуют сразу.</p>
+      </div>
+      <div class="src">Источник: <a href="https://in.investing.com/news/economy-news/rbnz-holds-rates-at-275-in-split-vote-signals-further-hikes-likely-5658560" target="_blank" rel="noopener">Investing.com</a>, <a href="https://www.fxstreet.com/news/new-zealand-dollar-sinks-to-sub-05600-levels-vs-usd-after-rbnz-surprise-on-hold-decision-202610280145" target="_blank" rel="noopener">FXStreet</a></div>
+    </article>
+
+    <h3 class="subhead">Фискальная политика и долг</h3>
+    <article class="card is-medium" id="uk-budget">
+      <h4><a href="https://www.marketscreener.com/news/gilt-yields-ease-sterling-falls-slightly-in-muted-reaction-to-u-k-budget-update-ce785cd2de8ff526" target="_blank" rel="noopener">Великобритания: первый бюджет Хили без сюрпризов, запас по бюджетным правилам 15 млрд £</a></h4>
+      <div class="tags">
+        <span class="tag is-medium">Влияние: среднее</span>
+        <span class="tag is-mixed">Смешанно: + гилты, − банки и букмекеры</span>
+        <span class="tag">Масштаб: <b>Страна</b></span>
+        <span class="tag">Сюрприз: <b>нет, в рамках ожиданий</b></span>
+        <span class="tag is-confirmed">Подтверждено</span>
+      </div>
+      <p class="facts">В 13:30 канцлер Джон Хили представил бюджет: бюджетные правила и обещание не повышать подоходный налог сохранены. По оценке OBR, запас на 2029/30 — 15 млрд £ (в марте 24 млрд £), в 2030/31 — 22 млрд £; процентные расходы в этом году вырастут на 14 млрд £. Чистая потребность в финансировании на 2026/27 — 258,6 млрд £ (+7,4 млрд £ к апрельской оценке). Меры: помощь домохозяйствам со счетами за энергию, дополнительные налоги на банки и игорный бизнес, новый безналоговый счёт для покупателей первого жилья. Доходность 10-летних гилтов снизилась на 2,1 б.п. до 5,321%, фунт — −0,1% до 1,3291 $; в начале октября доходность достигала 5,527%, максимума за 19 лет.</p>
+      <div class="estimate">
+        <span class="label">Оценка · последствия</span>
+        <p>Бюджет без сюрпризов снимает риск распродажи гилтов, но при доходности выше 5% и растущих процентных расходах пространство для манёвра остаётся узким. Внимание рынка переходит к Банку Англии, от которого аналитики ждут начала повышений в ноябре; новые налоги — локальный негатив для британских банков и букмекеров.</p>
+      </div>
+      <div class="src">Источник: <a href="https://www.marketscreener.com/news/gilt-yields-ease-sterling-falls-slightly-in-muted-reaction-to-u-k-budget-update-ce785cd2de8ff526" target="_blank" rel="noopener">Dow Jones via MarketScreener</a>, <a href="https://www.bloomberg.com/news/articles/2026-10-28/bond-traders-brace-for-budget-test-of-uk-s-newfound-resilience" target="_blank" rel="noopener">Bloomberg</a></div>
+    </article>
+  </section>
+
+  <section id="companies">
+    <h2><span class="n">05</span>Компании по секторам</h2>
+
+    <h3 class="subhead">Полупроводники</h3>
+    <article class="card is-high" id="sk-hynix-q3">
+      <h4><a href="https://finance.yahoo.com/technology/ai/articles/ai-chip-giant-sk-hynix-003518443.html" target="_blank" rel="noopener">SK Hynix: операционная прибыль выросла в 7 раз, память распродана до 2029 года</a></h4>
+      <div class="tags">
+        <span class="tag is-high">Влияние: высокое</span>
+        <span class="tag is-mixed">Смешанно: + память, − покупатели чипов</span>
+        <span class="tag">Масштаб: <b>Сектор</b></span>
+        <span class="tag">Сюрприз: <b>частично, чистая ниже прогноза</b></span>
+        <span class="tag is-in-trend">В русле тренда сектора</span>
+        <span class="tag is-confirmed">Подтверждено</span>
+      </div>
+      <p class="facts">Операционная прибыль за III квартал — 83,33 трлн вон (62,8 млрд $, +632% г/г), выручка — 104,61 трлн вон, впервые выше 100 трлн. Чистая прибыль 39,77 трлн вон оказалась ниже среднего прогноза 59,67 трлн (Yonhap). Компания заявила, что поставки DRAM и HBM на 2027–2029 годы «практически распроданы», а долгосрочные контракты покрывают не менее 50% выпуска на 2027–2028 годы; на возврат акционерам в 2026 году — около 100 трлн вон. Акции выросли на 10,9%, KOSPI — на 6,6% до 6 012,44; Samsung Electronics перед отчётом в четверг подорожала более чем на 8%.</p>
+      <div class="estimate">
+        <span class="label">Оценка · сигнал для сектора</span>
+        <p>Отчёт подтверждает, что дефицит памяти для ИИ продлится годы: это поддерживает цены DRAM/HBM, Samsung, Micron и поставщиков оборудования, а для покупателей памяти — рост себестоимости. Сигнал в русле тренда сектора: ИИ-капекс не замедляется, и сегодняшние отчёты Microsoft и Alphabet проверят это со стороны покупателей.</p>
+      </div>
+      <div class="src">Источник: <a href="https://finance.yahoo.com/technology/ai/articles/ai-chip-giant-sk-hynix-003518443.html" target="_blank" rel="noopener">AFP via Yahoo Finance</a>, <a href="https://en.fnnews.com/news/202610282128013224" target="_blank" rel="noopener">Financial News</a></div>
+    </article>
+
+    <h3 class="subhead">Банки</h3>
+    <article class="card is-medium" id="deutsche-bank-q3">
+      <h4><a href="https://live.euronext.com/en/financial-news/stoxx-600-inches-lower-investors-sift-through-earnings-higher-oil-prices" target="_blank" rel="noopener">Deutsche Bank: прибыль выросла вопреки ожиданиям снижения, сезон отчётов банков Европы — разнонаправленный</a></h4>
+      <div class="tags">
+        <span class="tag is-medium">Влияние: среднее</span>
+        <span class="tag is-mixed">Смешанно: + DB, StanChart, − Santander</span>
+        <span class="tag">Масштаб: <b>Сектор</b></span>
+        <span class="tag">Сюрприз: <b>да, выше ожиданий</b></span>
+        <span class="tag is-unclear-trend">Тренд сектора неоднозначен</span>
+        <span class="tag is-confirmed">Подтверждено</span>
+      </div>
+      <p class="facts">Прибыль Deutsche Bank за III квартал выросла на 2% при ожидавшемся снижении; акции к 11:15 прибавили 2,3%. Standard Chartered: прибыль до налогов +27% до 2,25 млрд $ (прогноз 1,99 млрд $), цели по росту и доходности на год повышены, акции +3,3%. Santander −4,5% из-за слабых результатов в Бразилии, UBS −2% при прибыли в рамках ожиданий. Индекс Euro Stoxx Banks снижался на 1% на опасениях из-за вложений банков в госдолг, испанский индекс — на 1,5%. Накануне, 27.10, HSBC подешевел более чем на 5% после выручки ниже прогнозов.</p>
+      <div class="estimate">
+        <span class="label">Оценка · сигнал для сектора</span>
+        <p>Сезон расслаивается: банки с сильным трейдингом и азиатским бизнесом выигрывают от волатильности, а банки, зависящие от Бразилии и от европейского госдолга (Франция, Италия), под давлением. Высокие ставки поддерживают маржу, но рост доходностей госбумаг бьёт по портфелям облигаций — поэтому единого тренда в секторе нет.</p>
+      </div>
+      <div class="src">Источник: <a href="https://live.euronext.com/en/financial-news/stoxx-600-inches-lower-investors-sift-through-earnings-higher-oil-prices" target="_blank" rel="noopener">Reuters via Euronext</a>, <a href="https://proactiveinvestors.com/companies/news/1100811/markets-live-standard-chartered-leads-ftse-100-after-profit-beat-1100811.html" target="_blank" rel="noopener">Proactive Investors</a>, <a href="https://www.brecorder.com/news/40446123/europe-shares-fall-as-hsbc-weighs-france-protests-keep-investors-wary" target="_blank" rel="noopener">Reuters via Business Recorder</a></div>
+    </article>
+
+    <h3 class="subhead">Авиастроение</h3>
+    <article class="card is-medium" id="boeing-q3">
+      <h4><a href="https://investors.boeing.com/investors/news/press-release-details/2026/Boeing-Reports-Third-Quarter-Results/default.aspx" target="_blank" rel="noopener">Boeing: убыток шире прогноза, цель по поставкам 737 на 2026 год не будет достигнута</a></h4>
+      <div class="tags">
+        <span class="tag is-medium">Влияние: среднее</span>
+        <span class="tag is-negative">Негатив: Boeing и поставщики</span>
+        <span class="tag">Масштаб: <b>Сектор</b></span>
+        <span class="tag">Сюрприз: <b>да, хуже прогноза</b></span>
+        <span class="tag is-against-trend">Против тренда сектора</span>
+        <span class="tag is-confirmed">Подтверждено</span>
+      </div>
+      <p class="facts">27.10 Boeing отчитался за III квартал: выручка 24,19 млрд $ (+4%), скорректированный убыток 0,34 $ на акцию при ожидавшихся 0,21 $ (по данным СМИ). Поставлено 161 коммерческий самолёт — больше всего с 2018 года, портфель заказов — рекордные 745 млрд $. Компания не выполнит цель около 500 поставок 737 в 2026 году: темп 47 машин в месяц переносится на начало 2027 года, 52 в месяц — на второе полугодие 2027-го. Акции упали примерно на 11%.</p>
+      <div class="estimate">
+        <span class="label">Оценка · сигнал для сектора</span>
+        <p>Спрос на самолёты рекордный, но производство не поспевает, что идёт против восстановительного тренда отрасли. Задержка продлевает дефицит узкофюзеляжных самолётов: авиакомпании дольше летают на старом парке с более высокими расходами на топливо, а поставщики двигателей и комплектующих позже получат рост объёмов.</p>
+      </div>
+      <div class="src">Источник: <a href="https://investors.boeing.com/investors/news/press-release-details/2026/Boeing-Reports-Third-Quarter-Results/default.aspx" target="_blank" rel="noopener">Boeing</a>, <a href="https://www.cnbc.com/2026/10/27/-boeing-ba-q3-2026-earnings.html" target="_blank" rel="noopener">CNBC</a></div>
+    </article>
+
+    <h3 class="subhead">Транспорт и логистика</h3>
+    <article class="card is-low" id="ups-q3">
+      <h4><a href="https://www.sec.gov/Archives/edgar/data/0001090727/000162828026067381/exhibit991-earningspressre.htm" target="_blank" rel="noopener">UPS: прибыль выше консенсуса, прогноз на 2026 год повышен</a></h4>
+      <div class="tags">
+        <span class="tag is-low">Влияние: низкое</span>
+        <span class="tag is-positive">Позитив: посылочные перевозчики</span>
+        <span class="tag">Масштаб: <b>Компания</b></span>
+        <span class="tag">Сюрприз: <b>да, выше консенсуса</b></span>
+        <span class="tag is-unclear-trend">Тренд сектора неоднозначен</span>
+        <span class="tag is-confirmed">Подтверждено</span>
+      </div>
+      <p class="facts">27.10 UPS сообщила о росте выручки за III квартал на 6,7% до 22,9 млрд $; скорректированная прибыль — 1,69 $ на акцию (консенсус 1,62 $, по данным СМИ), по GAAP — 1,37 $. Прогноз на 2026 год повышен: выручка около 92,6 млрд $, скорректированная операционная прибыль около 8,75 млрд $, скорректированная прибыль около 7,28 $ на акцию, свободный денежный поток около 6,1 млрд $.</p>
+      <div class="estimate">
+        <span class="label">Оценка · сигнал для сектора</span>
+        <p>Рост выручки по всем сегментам говорит, что посылочный спрос в США держится, несмотря на высокие ставки и бензин, — это согласуется с ростом доверия потребителей. Но отдельные результаты грузоперевозчиков неровные, поэтому однозначного тренда в секторе нет.</p>
+      </div>
+      <div class="src">Источник: <a href="https://www.sec.gov/Archives/edgar/data/0001090727/000162828026067381/exhibit991-earningspressre.htm" target="_blank" rel="noopener">UPS (форма 8-K)</a>, <a href="https://theblyesheet.substack.com/p/the-blye-sheet-before-the-bell-october-541" target="_blank" rel="noopener">The Blye Sheet</a></div>
+    </article>
+  </section>
+
+  <section id="regions">
+    <h2><span class="n">06</span>По регионам</h2>
+    <div class="regions">
+      <div class="region">
+        <div class="rname">Бразилия</div>
+        <ul>
+          <li id="br-markets">После неожиданной победы Лулы над Флавио Болсонару во втором туре 25.10 Ibovespa в понедельник рухнул на 13,88%; во вторник индекс снизился ещё на 0,51% до 175 710 пунктов, доллар подешевел на 0,97% до 5,35 реала, ставки DI снизились по всей кривой. Казначейство выкупило бумаги NTN-B и отменило аукцион LFT, министр финансов заявил о готовности фискальных мер. <a href="https://www.infomoney.com.br/mercados/ibovespa-hoje-bolsa-de-valores-ao-vivo-27102026/" target="_blank" rel="noopener">↗</a></li>
+        </ul>
+      </div>
+      <div class="region">
+        <div class="rname">Израиль</div>
+        <ul>
+          <li id="il-election">Выборы 27.10 не дали большинства ни одному блоку: при подсчёте 85,6% голосов у блока Нетаньяху 53 мандата, у блока Айзенкота — 48, у арабских партий — 19 (нужно 61); оба лидера заявили о победе, явка — 77,7%. Израильские облигации и шекель снизились (<a href="https://www.cnbc.com/2026/10/28/israel-election-netanyahu-trump-gaza-.html" target="_blank" rel="noopener">CNBC</a>). <a href="https://www.ynetnews.com/article/hjnatbkaml" target="_blank" rel="noopener">↗</a></li>
+        </ul>
+      </div>
+      <div class="region">
+        <div class="rname">Франция</div>
+        <ul>
+          <li id="fr-budget">27.10 Национальное собрание 79 голосами против 77 исключило из проекта бюджета-2027 продление чрезвычайного налога на прибыль крупных компаний (около 5 млрд €); голосование по всей доходной части — 3.11. Доходность 10-летних OAT в среду выросла до 4,965% (<a href="https://www.investing.com/news/forex-news/eurozone-yields-push-higher-as-french-spread-relief-fades-fed-ecb-eyed-4977652" target="_blank" rel="noopener">Investing.com</a>). <a href="https://nosparlementaires.fr/actualites/surtaxe-grandes-entreprises-supprimee-budget-2027-rn-macronistes" target="_blank" rel="noopener">↗</a></li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <section id="big-picture">
+    <h2><span class="n">07</span>Общая картина</h2>
+    <div class="bigpicture">
+      <div class="label">Интерпретация, не факты</div>
+      <p>Главная сила сейчас — энергетический шок, и за сутки он стал заметнее в ставках. Дорогое топливо разгоняет инфляцию (Австралия), а центробанки отвечают ужесточением даже при ядровой инфляции у цели (Канада) или как минимум обещают его (Новая Зеландия). Сильные данные из США — доверие потребителей, заказы, продажи жилья — и бум ИИ-инвестиций, подтверждённый SK Hynix, не дают рынку рассчитывать на смягчение, поэтому длинные доходности держатся у многолетних максимумов. Для роста картина смешанная: ИИ-капекс поддерживает спрос, а дорогие энергия и кредит давят на домохозяйства и чувствительные к ставкам сектора. ФРС сегодня и ЕЦБ завтра, скорее всего, возьмут паузу, но базовым сценарием остаются ставки «выше дольше» и риск повышений в декабре.</p>
+      <div class="shifts">
+        <span class="tag shift is-flat">Рост: смешанно</span>
+        <span class="tag shift is-up">Инфляция: риски вверх</span>
+        <span class="tag shift is-up">Ставки: выше дольше</span>
+      </div>
+    </div>
+  </section>
+
+  <section id="outlook">
+    <h2><span class="n">08</span>Календарь</h2>
+
+    <div class="day">
+      <h3>Сегодня · Ср 28.10</h3>
+      <ul class="events">
+        <li class="is-key">
+          <div class="time">19:00</div>
+          <div>
+            <div class="ev">US · Решение ФРС, в 19:30 — пресс-конференция Уорша</div>
+            <div class="cons">Ожидание: сохранение 3,75–4,00% (94 из 100 экономистов, опрос Reuters)</div>
+            <div class="why">Пауза в цене; при доходности UST около 5% тон Уорша о декабре определит динамику облигаций, доллара и техсектора.</div>
+          </div>
+        </li>
+        <li class="is-normal">
+          <div class="time is-session">после закр.</div>
+          <div>
+            <div class="ev">US · Отчёты Microsoft и Alphabet</div>
+            <div class="cons">Ожидание: EPS 4,71 $ (Microsoft) и 2,94 $ (Alphabet)</div>
+            <div class="why">Капекс на ИИ и рост облачной выручки — проверка спроса, на котором строится тезис SK Hynix о дефиците памяти.</div>
+          </div>
+        </li>
+      </ul>
+    </div>
+
+    <div class="day">
+      <h3>Чт 29.10</h3>
+      <ul class="events">
+        <li class="is-normal">
+          <div class="time is-session">ночью</div>
+          <div>
+            <div class="ev">KR · Отчёт Samsung Electronics за III квартал</div>
+            <div class="cons">Ожидание: в фокусе цены DRAM и HBM после отчёта SK Hynix</div>
+            <div class="why">Второй крупнейший производитель памяти подтвердит или поставит под сомнение масштаб ценового цикла.</div>
+          </div>
+        </li>
+        <li class="is-normal">
+          <div class="time">13:30</div>
+          <div>
+            <div class="ev">US · ВВП за III квартал (предв.), кв/кв в годовом выражении</div>
+            <div class="cons">Консенсус: <span class="num">3,0%</span> · пред.: <span class="num">2,2%</span></div>
+            <div class="why">Сильный рост при расширении торгового дефицита укрепит аргументы за декабрьское повышение ФРС.</div>
+          </div>
+        </li>
+        <li class="is-key">
+          <div class="time">13:30</div>
+          <div>
+            <div class="ev">US · Базовый ценовой индекс PCE за сентябрь, г/г</div>
+            <div class="cons">Консенсус: <span class="num">3,1%</span> · пред.: <span class="num">3,0%</span></div>
+            <div class="why">Целевой показатель ФРС на следующий день после решения: ускорение подтвердит сценарий повышения в декабре.</div>
+          </div>
+        </li>
+        <li class="is-key">
+          <div class="time">14:15</div>
+          <div>
+            <div class="ev">EZ · Решение ЕЦБ, в 14:45 — пресс-конференция Лагард</div>
+            <div class="cons">Ожидание: сохранение депозитной ставки 2,50%</div>
+            <div class="why">Рынок будет торговать сигналы о декабре и оценку рисков от французского долга при спреде OAT–Bund около многолетних максимумов.</div>
+          </div>
+        </li>
+        <li class="is-normal">
+          <div class="time is-session">после закр.</div>
+          <div>
+            <div class="ev">US · Отчёты Amazon и Intel</div>
+            <div class="cons">Ожидание: EPS 2,01 $ (Amazon) и 0,28 $ (Intel)</div>
+            <div class="why">AWS и капекс Amazon — ещё одна проверка ИИ-спроса; Intel — показатель рынка ПК при дорожающей памяти.</div>
+          </div>
+        </li>
+      </ul>
+    </div>
+
+    <div class="day">
+      <h3>Пт 30.10</h3>
+      <ul class="events">
+        <li class="is-normal">
+          <div class="time is-session">ночью</div>
+          <div>
+            <div class="ev">JP · Решение Банка Японии</div>
+            <div class="cons">Ожидание: сохранение ставки 1,25%</div>
+            <div class="why">При иене около 158 за доллар сигнал о повышении в декабре может поддержать иену.</div>
+          </div>
+        </li>
+        <li class="is-normal">
+          <div class="time">11:00</div>
+          <div>
+            <div class="ev">EZ · ВВП за III квартал (флеш), кв/кв</div>
+            <div class="cons">Консенсус: <span class="num">0,2%</span> · пред.: <span class="num">0,6%</span></div>
+            <div class="why">Замедление роста на фоне дорогой энергии и французского кризиса — аргумент против дальнейших повышений ЕЦБ.</div>
+          </div>
+        </li>
+        <li class="is-normal">
+          <div class="time is-session">до откр.</div>
+          <div>
+            <div class="ev">US · Отчёты ExxonMobil и Chevron</div>
+            <div class="cons">Ожидание: EPS 3,96 $ (ExxonMobil) и 4,78 $ (Chevron)</div>
+            <div class="why">Первые отчёты нефтяных гигантов за квартал с Brent выше 110 $: в фокусе выкупы акций и капекс.</div>
+          </div>
+        </li>
+      </ul>
+    </div>
+  </section>
+
+</main>
+
+<footer class="wrap">
+  <p>Метки «Оценка» и «Интерпретация» — аналитическое мнение, отделённое от фактов. «По данным СМИ» и «Слухи» — не подтверждено первоисточником.</p>
+  <p>Время везде берлинское. Не является инвестиционной рекомендацией.</p>
+</footer>
+
+</body>
+</html>
