@@ -57,7 +57,7 @@ content does not fit a form exactly, use the closest one.
 ## 2. Rendering
 
 Fill `template.html` and write the result to
-`digests/YYYY-MM-DD.html` (today's Berlin date). The comment at the top of
+`docs/YYYY-MM-DD.html` (today's Berlin date). The comment at the top of
 the template defines the vocabulary, formats and markers; follow it.
 
 - Keep the `<head>` (fill only the title), the `<style>` block, the section
@@ -94,7 +94,7 @@ the template defines the vocabulary, formats and markers; follow it.
 1. Run the checker:
 
    ```bash
-   python3 check.py digests/$(TZ=Europe/Berlin date +%F).html
+   python3 check.py docs/$(TZ=Europe/Berlin date +%F).html
    ```
 
    It prints `OK`, or one line per problem in the form
@@ -120,7 +120,7 @@ Then reread the page once as a reader:
 
 ## 4. Publish
 
-- Copy the page to `digests/index.html` as well, so the latest digest is
+- Copy the page to `docs/index.html` as well, so the latest digest is
   always at the same address.
 - Commit both files to the `digests` branch (create it as an orphan branch
   if it does not exist; never commit to `main`) with the message
