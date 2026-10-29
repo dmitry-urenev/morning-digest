@@ -1,0 +1,629 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="color-scheme" content="light dark">
+<title>Дайджест · 29.10</title>
+<style>
+  :root {
+    --bg: #fbfaf7;
+    --text: #1d1d1b;
+    --muted: #6b6963;
+    --faint: #9a978f;
+    --rule: #e6e3dc;
+    --tint: #f2f0ea;
+    --accent: #2f5bd3;
+    --pos: #16794a;
+    --neg: #b42323;
+    --mix: #9a6100;
+    --high: #c62828;
+    --med: #c98a00;
+    --low: #9aa1ab;
+    --estimate: #6b5fd0;
+    --font: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    --mono: ui-monospace, "SF Mono", "JetBrains Mono", Menlo, Consolas, monospace;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg: #1d1f20;
+      --text: #e8e6e1;
+      --muted: #a09e98;
+      --faint: #74726d;
+      --rule: #2b2d30;
+      --tint: #1d1f21;
+      --accent: #8aa6ff;
+      --pos: #4cc58a;
+      --neg: #f07070;
+      --mix: #e3b04b;
+      --high: #f06262;
+      --med: #e3b04b;
+      --low: #6f7680;
+      --estimate: #a89ff2;
+    }
+  }
+
+  * { box-sizing: border-box; }
+  html { scroll-behavior: smooth; scroll-padding-top: 56px; }
+  body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--text);
+    font: 16px/1.6 var(--font);
+    -webkit-text-size-adjust: 100%;
+  }
+  a { color: var(--accent); text-decoration: none; }
+  a:hover { text-decoration: underline; }
+  .wrap { max-width: 760px; margin: 0 auto; padding: 0 20px; }
+  .num { font-family: var(--mono); font-variant-numeric: tabular-nums; }
+
+  /* Masthead */
+  .masthead { padding-top: 40px; padding-bottom: 8px; }
+  .masthead .kicker { font-size: 12.5px; letter-spacing: .08em; text-transform: uppercase; color: var(--muted); }
+  .masthead h1 { margin: 4px 0 6px; font-size: 32px; line-height: 1.2; letter-spacing: -.01em; }
+  .masthead .meta { display: flex; flex-wrap: wrap; column-gap: 16px; row-gap: 2px; color: var(--muted); font-size: 14px; }
+  .lede { margin: 18px 0 0; font-size: 19px; line-height: 1.5; }
+
+  /* Section nav */
+  nav.toc {
+    position: sticky; top: 0; z-index: 5;
+    background: color-mix(in srgb, var(--bg) 92%, transparent);
+    backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px);
+  }
+  nav.toc .wrap { display: flex; gap: 18px; overflow-x: auto; padding-top: 12px; padding-bottom: 12px; scrollbar-width: none; }
+  nav.toc .wrap::-webkit-scrollbar { display: none; }
+  nav.toc a { flex: none; font-size: 13.5px; color: var(--muted); }
+  nav.toc a:hover { color: var(--text); text-decoration: none; }
+
+  /* Sections */
+  section { padding: 36px 0 4px; }
+  section > h2 {
+    display: flex; align-items: baseline; gap: 10px;
+    margin: 0 0 6px -46px; font-size: 28px; font-weight: 400; color: var(--muted);
+  }
+  section > h2 .n { color: var(--rule); font-family: var(--mono); font-weight: 400; }
+  h3.subhead { margin: 22px 0 0; font-size: 18px; text-transform: uppercase; font-weight: 400; color: var(--muted); }
+  .empty { color: var(--muted); font-style: italic; margin: 8px 0 0; }
+  .note { font-size: 13px; color: var(--muted); margin: 10px 0 0; }
+
+  /* Story items: separated by whitespace and a hairline, no boxes */
+  .card { padding: 18px 0; border-bottom: 1px solid var(--rule); }
+  .card:last-child { border-bottom: none; }
+  .card h4 { margin: 0 0 6px; font-size: 18px; line-height: 1.35; }
+  .card h4 a { color: var(--text); }
+  .card h4 a:hover { color: var(--accent); }
+  .card p { margin: 8px 0 0; }
+  .card .src { margin-top: 8px; font-size: 13px; color: var(--muted); }
+  .card .src a { word-break: break-word; }
+
+  /* Chips are plain inline labels; colour carries the value */
+  .tags { display: flex; flex-wrap: wrap; gap: 2px 14px; font-size: 13px; line-height: 18px; color: var(--muted); margin-bottom: 18px; }
+  .tag { color: var(--muted); }
+  .tag.is-high, .tag.is-medium, .tag.is-low, .tag.is-confirmed, .tag.is-reported, .tag.is-rumor { white-space: nowrap; }
+  .tag b { font-weight: 500; color: var(--text); }
+  .tag.is-high, .tag.is-medium, .tag.is-low { font-weight: 600; color: var(--text); }
+  .tag.is-high::before, .tag.is-medium::before, .tag.is-low::before {
+    content: ""; display: inline-block; width: 8px; height: 8px; border-radius: 50%; margin-right: 6px; vertical-align: 1px;
+  }
+  .tag.is-high::before { background: var(--high); }
+  .tag.is-medium::before { background: var(--med); }
+  .tag.is-low::before { background: var(--low); }
+  .tag.is-positive { color: var(--pos); }
+  .tag.is-negative { color: var(--neg); }
+  .tag.is-mixed { color: var(--mix); }
+  .tag.is-reported { color: var(--mix); font-style: italic; }
+  .tag.is-rumor { color: var(--neg); font-style: italic; }
+  .tag.is-against-trend { color: var(--mix); }
+  .tag.shift.is-up::before { content: "▲ "; font-size: 10px; }
+  .tag.shift.is-down::before { content: "▼ "; font-size: 10px; }
+  .tag.shift.is-flat::before { content: "● "; font-size: 8px; vertical-align: 1px; }
+
+  .estimate { margin: 16px 0; }
+  .estimate .label {
+    display: block; font-size: 11px; letter-spacing: .07em; text-transform: uppercase;
+    color: var(--estimate); font-weight: 700;
+  }
+  .estimate p { margin: 2px 0 0; }
+
+  /* Top stories: linked contents list */
+  ul.top { list-style: none; margin: 0; padding: 0; }
+  ul.top > li {
+    display: flex; align-items: baseline; gap: 12px;
+    padding: 10px 0; border-bottom: 1px solid var(--rule);
+  }
+  ul.top > li:last-child { border-bottom: none; }
+  ul.top > li::before {
+    content: ""; flex: none; width: 8px; height: 8px; border-radius: 50%; background: var(--low);
+    transform: translateY(-2px);
+  }
+  ul.top > li.is-high::before { background: var(--high); }
+  ul.top > li.is-medium::before { background: var(--med); }
+  ul.top .headline { flex: 1; font-weight: 600; font-size: 16.5px; line-height: 1.4; }
+  ul.top .headline a { color: var(--text); }
+  ul.top .headline a:hover { color: var(--accent); }
+  ul.top .where { display: block; font-size: 13px; font-weight: 400; color: var(--muted); }
+  ul.top .tag { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+
+  /* Jump target from the contents list */
+  .card:target, tr:target > td, li:target { animation: target-flash 2.4s ease-out; }
+  @keyframes target-flash {
+    from { background: color-mix(in srgb, var(--accent) 16%, var(--bg)); }
+  }
+
+  /* Today's focus */
+  .card.is-preview { margin-top: 14px; padding: 18px 20px; background: var(--tint); border-bottom: none; border-radius: 6px; }
+  .card .kicker {
+    display: block; font-size: 11px; letter-spacing: .07em; text-transform: uppercase;
+    color: var(--accent); font-weight: 700; margin-bottom: 4px;
+  }
+  .card dl { display: grid; grid-template-columns: 120px 1fr; gap: 4px 14px; margin: 10px 0 0; }
+  .card dt { color: var(--muted); font-size: 14px; }
+  .card dd { margin: 0; }
+
+  /* Markets strip */
+  .markets {
+    display: grid; grid-template-columns: repeat(auto-fill, minmax(130px, 1fr)); gap: 18px 20px; margin-top: 14px;
+  }
+  .tile .name { font-size: 12.5px; color: var(--muted); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .tile .value { font: 600 20px/1.3 var(--mono); font-variant-numeric: tabular-nums; }
+  .tile .chg { font: 500 13px/1.4 var(--mono); font-variant-numeric: tabular-nums; }
+  .tile .asof { font-size: 11.5px; color: var(--faint); }
+  .tile.is-up .chg { color: var(--pos); }
+  .tile.is-up .chg::before { content: "▲ "; font-size: 10px; }
+  .tile.is-down .chg { color: var(--neg); }
+  .tile.is-down .chg::before { content: "▼ "; font-size: 10px; }
+  .tile.is-flat .chg { color: var(--muted); }
+  .tile.is-flat .chg::before { content: "● "; font-size: 8px; vertical-align: 2px; }
+
+  /* Data table */
+  .table-scroll { overflow-x: auto; margin-top: 8px; }
+  table.data { width: 100%; border-collapse: collapse; font-size: 14.5px; min-width: 600px; }
+  table.data th, table.data td { padding: 10px 10px 10px 0; text-align: left; border-bottom: 1px solid var(--rule); vertical-align: top; }
+  table.data tr:last-child td { border-bottom: none; }
+  table.data th { font-size: 11.5px; font-weight: 600; color: var(--muted); text-transform: uppercase; letter-spacing: .05em; }
+  table.data td.r, table.data th.r { text-align: right; padding-right: 16px; }
+  table.data td.num { white-space: nowrap; }
+  table.data .actual { font-weight: 700; }
+  table.data .what { font-weight: 600; }
+  table.data .what small { display: block; font-weight: 400; color: var(--muted); }
+  table.data td small.rev { display: block; font-size: 11.5px; color: var(--muted); font-family: var(--font); }
+  table.data td .tag { font-size: 13px; }
+  .flag { font-size: 13px; font-weight: 600; white-space: nowrap; }
+  .flag.is-inline { color: var(--muted); font-weight: 500; }
+
+  /* Regional roundup */
+  .region { display: grid; grid-template-columns: 120px 1fr; gap: 14px; padding: 14px 0; border-bottom: 1px solid var(--rule); }
+  .region:last-child { border-bottom: none; }
+  .region .rname { font-weight: 600; }
+  .region ul { margin: 0; padding-left: 18px; }
+  .region li + li { margin-top: 4px; }
+
+  /* Big picture */
+  .bigpicture { margin-top: 12px; padding-left: 16px; border-left: 2px solid var(--estimate); }
+  .bigpicture .label { font-size: 11px; letter-spacing: .07em; text-transform: uppercase; color: var(--estimate); font-weight: 700; }
+  .bigpicture p { margin: 4px 0 0; font-size: 17.5px; line-height: 1.55; }
+  .shifts { display: flex; flex-wrap: wrap; gap: 4px 18px; margin-top: 10px; font-size: 13.5px; }
+  .shifts .tag { color: var(--text); }
+
+  /* Outlook */
+  .day h3 { margin: 22px 0 2px; font-size: 13px; color: var(--muted); font-weight: 700; text-transform: uppercase; letter-spacing: .06em; }
+  ul.events { list-style: none; margin: 0; padding: 0; }
+  ul.events li { display: grid; grid-template-columns: 76px 1fr; gap: 12px; padding: 10px 0; border-bottom: 1px solid var(--rule); }
+  ul.events li:last-child { border-bottom: none; }
+  ul.events .time { font: 600 14px/1.55 var(--mono); color: var(--muted); }
+  ul.events .time.is-session { font: 600 12.5px/1.4 var(--font); padding-top: 2px; }
+  ul.events .ev { font-weight: 600; }
+  ul.events .cons { font-size: 13.5px; color: var(--muted); }
+  ul.events .why { font-size: 14.5px; margin-top: 2px; }
+  ul.events li.is-key .time { color: var(--high); }
+  ul.events li.is-key .ev::after {
+    content: "Ключевое"; margin-left: 8px; font-size: 10.5px; font-weight: 700; letter-spacing: .06em;
+    text-transform: uppercase; color: var(--high); vertical-align: 1px;
+  }
+
+  /* Checker problems left after three fix attempts */
+  .check-errors { margin: 40px 0; padding: 16px 18px; background: var(--tint); border-left: 3px solid var(--neg); border-radius: 6px; }
+  .check-errors h2 { margin: 0; font-size: 13px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; color: var(--neg); }
+  .check-errors p { margin: 6px 0 0; font-size: 14px; color: var(--muted); }
+  .check-errors ul { margin: 8px 0 0; padding-left: 18px; font: 12.5px/1.5 var(--mono); color: var(--muted); }
+  .check-errors li { overflow-wrap: anywhere; }
+
+  footer { margin-top: 40px; margin-bottom: 48px; padding-top: 14px; border-top: 1px solid var(--rule); font-size: 13px; color: var(--muted); }
+  footer p { margin: 4px 0; }
+
+  /* Hanging section numbers need room left of the column; pull them in on narrower screens */
+  @media (max-width: 860px) {
+    section > h2 { margin-left: 0; }
+  }
+  @media (max-width: 600px) {
+    body { font-size: 15.5px; }
+    .wrap { padding: 0 16px; }
+    .masthead { padding-top: 28px; }
+    .masthead h1 { font-size: 26px; }
+    .lede { font-size: 17.5px; }
+    .region { grid-template-columns: 1fr; gap: 4px; }
+    .card dl { grid-template-columns: 1fr; gap: 0; }
+    .card dd { margin-bottom: 6px; }
+    .markets { grid-template-columns: repeat(2, 1fr); }
+    ul.events li { grid-template-columns: 64px 1fr; }
+  }
+  @media print {
+    nav.toc { display: none; }
+    body { background: #fff; }
+    .card, ul.top > li, .tile, .region, ul.events li { break-inside: avoid; }
+  }
+</style>
+</head>
+<body>
+
+<header class="masthead wrap">
+  <div class="kicker">Макро и рынки · утренний дайджест</div>
+  <h1>Четверг, 29 октября 2026</h1>
+  <div class="meta">
+    <span>Период: 28.10, 06:30 — 29.10, 06:06</span>
+    <span>Подготовлено 06:06 по Берлину</span>
+  </div>
+  <p class="lede">ФРС сохранила ставку 3,75–4,00% при двух голосах за повышение, а доходность 10-летних UST держится около 5%; сегодня ЕЦБ в 14:15 по Берлину, как ожидается, оставит ставку по депозитам 2,50%, и внимание будет на сигнале по декабрю.</p>
+</header>
+
+<nav class="toc" aria-label="Разделы">
+  <div class="wrap">
+    <a href="#top-stories">Главное</a>
+    <a href="#markets">Рынки</a>
+    <a href="#data">Данные</a>
+    <a href="#policy">Макро и политика</a>
+    <a href="#companies">Компании</a>
+    <a href="#regions">Регионы</a>
+    <a href="#big-picture">Общая картина</a>
+    <a href="#outlook">Календарь</a>
+  </div>
+</nav>
+
+<main class="wrap">
+
+  <section id="top-stories">
+    <h2><span class="n">01</span>Главное</h2>
+    <ul class="top">
+      <li class="is-high">
+        <div class="headline"><a href="#ecb-decision">ЕЦБ сегодня: ожидается пауза на 2,50%, в фокусе сигнал по декабрю</a><span class="where">Сегодня в фокусе</span></div>
+        <span class="tag is-high">высокое</span>
+      </li>
+      <li class="is-high">
+        <div class="headline"><a href="#fed-hold">ФРС оставила ставку 3,75–4,00%, двое проголосовали за повышение</a><span class="where">Центробанки</span></div>
+        <span class="tag is-high">высокое</span>
+      </li>
+      <li class="is-high">
+        <div class="headline"><a href="#oil-brent">Brent выше 115 $ на перебоях поставок с Ближнего Востока</a><span class="where">Энергетика и сырьё</span></div>
+        <span class="tag is-high">высокое</span>
+      </li>
+      <li class="is-high">
+        <div class="headline"><a href="#alphabet-q3">Alphabet: промах по EPS и отрицательный FCF, акции −8–10% после закрытия</a><span class="where">Технологии и ИИ-инфраструктура</span></div>
+        <span class="tag is-high">высокое</span>
+      </li>
+      <li class="is-medium">
+        <div class="headline"><a href="#msft-q3">Microsoft: Azure +48%, капекс ниже ожиданий, акции растут</a><span class="where">Технологии и ИИ-инфраструктура</span></div>
+        <span class="tag is-medium">среднее</span>
+      </li>
+      <li class="is-medium">
+        <div class="headline"><a href="#boc-hike">Банк Канады повысил ставку до 2,5%, допустил продолжение</a><span class="where">Центробанки</span></div>
+        <span class="tag is-medium">среднее</span>
+      </li>
+    </ul>
+  </section>
+
+  <section id="markets">
+    <h2><span class="n">02</span>Рынки</h2>
+    <div class="markets">
+      <div class="tile is-up">
+        <div class="name">UST 10 лет</div>
+        <div class="value">5,02%</div>
+        <div class="chg">+3 б.п.</div>
+        <div class="asof">закр. 28.10</div>
+      </div>
+      <div class="tile is-up">
+        <div class="name">Brent</div>
+        <div class="value">115,32 $</div>
+        <div class="chg">+1,0%</div>
+        <div class="asof">расчётная цена 28.10</div>
+      </div>
+      <div class="tile is-up">
+        <div class="name">WTI</div>
+        <div class="value">102,78 $</div>
+        <div class="chg">+3,0%</div>
+        <div class="asof">расчётная цена 28.10</div>
+      </div>
+      <div class="tile is-up">
+        <div class="name">S&amp;P 500</div>
+        <div class="value">7 743,97</div>
+        <div class="chg">+0,28%</div>
+        <div class="asof">закр. 28.10</div>
+      </div>
+      <div class="tile is-up">
+        <div class="name">Dow Jones</div>
+        <div class="value">52 475,10</div>
+        <div class="chg">+0,19%</div>
+        <div class="asof">закр. 28.10</div>
+      </div>
+      <div class="tile is-up">
+        <div class="name">Nasdaq Composite</div>
+        <div class="value">26 549,85</div>
+        <div class="chg">+0,27%</div>
+        <div class="asof">закр. 28.10</div>
+      </div>
+      <div class="tile is-up">
+        <div class="name">Nikkei 225</div>
+        <div class="value">63 954</div>
+        <div class="chg">+1,08%</div>
+        <div class="asof">закр. 28.10</div>
+      </div>
+      <div class="tile is-up">
+        <div class="name">Kospi</div>
+        <div class="value">6 012,44</div>
+        <div class="chg">+6,63%</div>
+        <div class="asof">закр. 28.10</div>
+      </div>
+      <div class="tile is-up">
+        <div class="name">Hang Seng</div>
+        <div class="value">23 094,83</div>
+        <div class="chg">+0,23%</div>
+        <div class="asof">закр. 28.10</div>
+      </div>
+    </div>
+    <p class="note">Источники: <a href="https://lufkindailynews.com/news_reuters/business/global-stocks-hold-gains-after-fed-decision-oil-prices-rise/article_83a86c22-7fed-5223-a82f-bc1d7c12ea30.html" target="_blank" rel="noopener">Reuters</a>, <a href="https://www.bnnbloomberg.ca/markets/2026/10/28/us-stocks-remains-steady-after-fed-says-it-wont-raise-interest-rates/" target="_blank" rel="noopener">BNN Bloomberg</a>, <a href="https://www.cnbc.com/2026/10/27/stock-market-today-live-updates.html" target="_blank" rel="noopener">CNBC</a>, <a href="https://bbntimes.com/companies/hong-kong-stock-exchange-hang-seng-index-rises-to-23-094-83-as-lenovo-leads-an-ai-hardware-rebound" target="_blank" rel="noopener">BBN Times</a>. Доходность 10-летних UST у источников расходится (5,02% и 5,05%). Уровни EUR/USD, Bund, золота, DAX и Euro Stoxx 50 за 28.10 найти не удалось; евро, по данным <a href="https://fxstreet.com/news/euro-steadies-near-17-month-lows-ahead-of-fed-rate-verdict-202610281401" target="_blank" rel="noopener">FXStreet</a>, держится вблизи 17-месячных минимумов.</p>
+  </section>
+
+  <section id="data">
+    <h2><span class="n">03</span>Вышедшие данные</h2>
+    <div class="table-scroll">
+      <table class="data">
+        <thead>
+          <tr>
+            <th>Показатель</th>
+            <th class="r">Факт</th>
+            <th class="r">Консенсус</th>
+            <th class="r">Пред.</th>
+            <th>Сюрприз</th>
+            <th>Влияние</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr id="us-conf-board">
+            <td class="what"><a href="https://finance.yahoo.com/markets/stocks/articles/stock-market-news-oct-28-081900420.html" target="_blank" rel="noopener">US · Доверие потребителей Conference Board</a><small>октябрь · 27.10, 15:00</small></td>
+            <td class="r num actual">91,7</td>
+            <td class="r num">82,8</td>
+            <td class="r num">84,2<small class="rev">пересм. с 81,9</small></td>
+            <td><span class="flag is-above">▲ Выше</span></td>
+            <td><span class="tag is-low">низкое</span></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <p class="note">Данные вышли до начала периода и включены, поскольку попали в обзоры рынка 28.10; консенсус по оценке Zacks. <a href="https://finance.yahoo.com/markets/stocks/articles/stock-market-news-oct-28-081900420.html" target="_blank" rel="noopener">↗</a></p>
+  </section>
+
+  <section id="policy">
+    <h2><span class="n">04</span>Макро и политика</h2>
+
+    <article class="card is-preview" id="ecb-decision">
+      <span class="kicker">Сегодня в фокусе · 14:15</span>
+      <h4><a href="https://www.euinsider.eu/news/ecb-thursday-hold-inflation-38-lagarde-exit-2026" target="_blank" rel="noopener">ЕЦБ: решение по ставкам (пресс-конференция Лагард в 14:45)</a></h4>
+      <div class="tags">
+        <span class="tag is-high">Влияние: высокое</span>
+      </div>
+      <dl>
+        <dt>Ожидания</dt><dd>Сохранение ставки по депозитам на 2,50%: 70 из 73 экономистов в опросе Reuters от 5–8.10 ждут паузу, 64 из 73 — повышения на 25 б.п. в декабре. Инфляция в еврозоне в сентябре 3,8% (Eurostat); ЕЦБ повышал ставку дважды с июня. <a href="https://www.tmgm.com/de/analysis/market-news/article/ecb-expected-to-pause-in-october-before-hiking-rates-in-december-reuters-poll-202610081239" target="_blank" rel="noopener">Опрос Reuters</a>, <a href="https://www.euinsider.eu/news/ecb-thursday-hold-inflation-38-lagarde-exit-2026" target="_blank" rel="noopener">EU Insider</a>.</dd>
+        <dt>Что удивит</dt><dd>Повышение уже сегодня; явный сигнал на декабрь или, наоборот, смягчение риторики; реакция на расширение спреда Франции к Бунду (около 147–152 б.п. в начале октября, <a href="https://www.babypips.com/news/explainer-why-the-oat-bund-spread-matters-for-the-euro-2026-10-12" target="_blank" rel="noopener">BabyPips</a>); по версии аналитиков Danske, Лагард может объявить о досрочном уходе (не подтверждено).</dd>
+      </dl>
+      <div class="estimate">
+        <span class="label">Оценка · реакция рынка</span>
+        <p>Пауза уже в цене, поэтому рынок отреагирует на формулировки: жёсткий сигнал на декабрь поддержит евро и поднимет доходности, но усилит давление на периферию, прежде всего на Францию. Мягкий тон при инфляции 3,8% ослабит евро, которое и так у минимумов.</p>
+      </div>
+      <div class="src">Источник: <a href="https://www.euinsider.eu/news/ecb-thursday-hold-inflation-38-lagarde-exit-2026" target="_blank" rel="noopener">EU Insider</a>, <a href="https://www.tmgm.com/de/analysis/market-news/article/ecb-expected-to-pause-in-october-before-hiking-rates-in-december-reuters-poll-202610081239" target="_blank" rel="noopener">Reuters (через TMGM)</a></div>
+    </article>
+
+    <h3 class="subhead">Центробанки</h3>
+    <article class="card is-high" id="fed-hold">
+      <h4><a href="https://www.cnn.com/2026/10/28/business/live-news/federal-reserve-interest-rate-october" target="_blank" rel="noopener">ФРС сохранила ставку 3,75–4,00%, Кук и Хэммак голосовали за повышение</a></h4>
+      <div class="tags">
+        <span class="tag is-high">Влияние: высокое</span>
+        <span class="tag is-mixed">Смешанно: + доллар, − облигации и заёмщики</span>
+        <span class="tag">Масштаб: <b>Глобально</b></span>
+        <span class="tag">Сюрприз: <b>нет, пауза в цене</b></span>
+        <span class="tag is-confirmed">Подтверждено</span>
+      </div>
+      <p class="facts">Решение FOMC 28.10 (19:00 по Берлину), голосование 10–2: Лиза Кук и Бет Хэммак выступили за повышение на 25 б.п. В заявлении: «Inflation remains elevated». Председатель Кевин Уорш на пресс-конференции заявил, что ФРС хочет увидеть, как сложатся условия, прежде чем делать следующий шаг; доходность 2-летних UST опускалась до 4,69%. По CME FedWatch вероятность повышения в декабре 85,0% против 78,3% днём ранее.</p>
+      <div class="estimate">
+        <span class="label">Оценка · последствия</span>
+        <p>Два голоса за повышение и цена в 85% на декабрь означают, что стоимость заимствования останется высокой: давление на ипотеку, корпоративный долг и бюджетные расходы на обслуживание долга США. Для доллара и банковских маржей эффект поддерживающий, для длинных облигаций и акций роста — негативный.</p>
+      </div>
+      <div class="src">Источник: <a href="https://www.cnn.com/2026/10/28/business/live-news/federal-reserve-interest-rate-october" target="_blank" rel="noopener">CNN</a>, <a href="https://www.cnbc.com/2026/10/28/fed-interest-rate-decision-october-2026.html" target="_blank" rel="noopener">CNBC</a>, <a href="https://www.bnnbloomberg.ca/markets/2026/10/28/us-stocks-remains-steady-after-fed-says-it-wont-raise-interest-rates/" target="_blank" rel="noopener">BNN Bloomberg</a></div>
+    </article>
+
+    <article class="card is-medium" id="boc-hike">
+      <h4><a href="https://www.bnnbloomberg.ca/business/economics/2026/10/28/bank-of-canada-raises-interest-rate-as-inflation-projected-to-worsen/" target="_blank" rel="noopener">Банк Канады повысил ставку на 25 б.п. до 2,5%</a></h4>
+      <div class="tags">
+        <span class="tag is-medium">Влияние: среднее</span>
+        <span class="tag is-mixed">Смешанно: + канадский доллар, − заёмщики и ипотека</span>
+        <span class="tag">Масштаб: <b>Страна</b></span>
+        <span class="tag">Сюрприз: <b>частично: ожидания по данным источников расходились</b></span>
+        <span class="tag is-confirmed">Подтверждено</span>
+      </div>
+      <p class="facts">Решение 28.10 (14:45 по Берлину): первое изменение ставки после семи пауз подряд и первое повышение с июля 2023. Макклем: шаг нужен, чтобы энергетические цены не перешли в общую инфляцию. Прогноз инфляции на 2027 повышен до 3,1% с 2,0%, к концу года ожидается 3,5%; будущие решения — «по одному заседанию». Часть экономистов возражала: базовая инфляция около 2%.</p>
+      <div class="estimate">
+        <span class="label">Оценка · последствия</span>
+        <p>Центробанк реагирует на нефтяной шок, а не на базовую инфляцию, и это сигнал для других импортёров энергии. Дороже станут ипотека и кредиты в Канаде; курс канадского доллара получает поддержку.</p>
+      </div>
+      <div class="src">Источник: <a href="https://www.bnnbloomberg.ca/business/economics/2026/10/28/bank-of-canada-raises-interest-rate-as-inflation-projected-to-worsen/" target="_blank" rel="noopener">BNN Bloomberg</a>, <a href="https://www.cbc.ca/news/business/livestory/bank-of-canada-interest-rate-announcement-oct-28-9.7398140" target="_blank" rel="noopener">CBC</a></div>
+    </article>
+
+    <h3 class="subhead">Энергетика и сырьё</h3>
+    <article class="card is-high" id="oil-brent">
+      <h4><a href="https://lufkindailynews.com/news_reuters/business/global-stocks-hold-gains-after-fed-decision-oil-prices-rise/article_83a86c22-7fed-5223-a82f-bc1d7c12ea30.html" target="_blank" rel="noopener">Brent выше 115 $: перебои поставок с Ближнего Востока</a></h4>
+      <div class="tags">
+        <span class="tag is-high">Влияние: высокое</span>
+        <span class="tag is-mixed">Смешанно: + экспортёры нефти, − импортёры и инфляция</span>
+        <span class="tag">Масштаб: <b>Глобально</b></span>
+        <span class="tag">Сюрприз: <b>нет, продолжение роста</b></span>
+        <span class="tag is-confirmed">Подтверждено</span>
+      </div>
+      <p class="facts">Brent 28.10 закрылся на 115,32 $ (+1%), WTI — на 102,78 $ (+3%) на опасениях по поставкам с Ближнего Востока (Reuters); по другим источникам, Brent около 115,67 $ внутри дня. Всемирный банк в обзоре Commodity Markets Outlook (28.10) прогнозирует рост цен на сырьё в 2026 на 23%.</p>
+      <div class="estimate">
+        <span class="label">Оценка · последствия</span>
+        <p>Дорогая нефть поддерживает инфляцию и объясняет повышения ставок в Канаде и еврозоне и жёсткий тон ФРС. Для импортёров энергии это налог на потребление и ухудшение торгового баланса, для нефтяных компаний и экспортёров — рост доходов.</p>
+      </div>
+      <div class="src">Источник: <a href="https://lufkindailynews.com/news_reuters/business/global-stocks-hold-gains-after-fed-decision-oil-prices-rise/article_83a86c22-7fed-5223-a82f-bc1d7c12ea30.html" target="_blank" rel="noopener">Reuters</a>, <a href="https://worldbank.org/en/news/press-release/2026/10/28/commodity-markets-outlook-october-2026" target="_blank" rel="noopener">Всемирный банк</a></div>
+    </article>
+  </section>
+
+  <section id="companies">
+    <h2><span class="n">05</span>Компании по секторам</h2>
+    <h3 class="subhead">Технологии и ИИ-инфраструктура</h3>
+    <article class="card is-high" id="alphabet-q3">
+      <h4><a href="https://investinglive.com/stocks/alphabet-slides-over-9-after-hours-as-search-miss-and-9bn-cash-burn-overshadow-cloud/" target="_blank" rel="noopener">Alphabet: промах по EPS и отрицательный свободный денежный поток</a></h4>
+      <div class="tags">
+        <span class="tag is-high">Влияние: высокое</span>
+        <span class="tag is-mixed">Смешанно: − Alphabet, + поставщики ИИ-оборудования</span>
+        <span class="tag">Масштаб: <b>Сектор</b></span>
+        <span class="tag">Сюрприз: <b>да, EPS ниже консенсуса</b></span>
+        <span class="tag is-unclear-trend">Тренд сектора неоднозначен</span>
+        <span class="tag is-reported">По данным СМИ</span>
+      </div>
+      <p class="facts">Отчёт за III квартал 28.10 после закрытия: скорректированная прибыль на акцию 2,67 $ против 3,02 $ ожидавшихся; Google Cloud, по данным обзора, +103% при операционной прибыли 11,1 млрд $ и выручке 30,7 млрд $. Капзатраты около 51,4 млрд $, свободный денежный поток −9,07 млрд $; прогноз капзатрат на 2026 — 195–205 млрд $, на 2027 финдиректор обещает значительный рост. Акции упали примерно на 8–10% после закрытия (по данным СМИ).</p>
+      <div class="estimate">
+        <span class="label">Оценка · сигнал для сектора</span>
+        <p>Рынок разделяет «рост облака» и «стоимость ИИ»: наращивание капзатрат при отрицательном FCF наказывается. Для поставщиков чипов и центров обработки данных высокие капзатраты остаются спросом, но для крупных облачных компаний растёт требование к окупаемости.</p>
+      </div>
+      <div class="src">Источник: <a href="https://investinglive.com/stocks/alphabet-slides-over-9-after-hours-as-search-miss-and-9bn-cash-burn-overshadow-cloud/" target="_blank" rel="noopener">InvestingLive</a>, <a href="https://www.fool.com/investing/2026/10/28/microsoft-and-alphabet-just-reported-earnings-putting-the-ai-boom-to-the-test/" target="_blank" rel="noopener">Motley Fool</a></div>
+    </article>
+
+    <article class="card is-medium" id="msft-q3">
+      <h4><a href="https://xtb.com/int/market-analysis/news-and-research/microsoft-results-cloud-growth-overshadows-capex-questions" target="_blank" rel="noopener">Microsoft: Azure ускорился до +48%, капзатраты ниже ожиданий</a></h4>
+      <div class="tags">
+        <span class="tag is-medium">Влияние: среднее</span>
+        <span class="tag is-positive">Позитив: Microsoft, облачный сектор</span>
+        <span class="tag">Масштаб: <b>Сектор</b></span>
+        <span class="tag">Сюрприз: <b>да, капзатраты ниже ожиданий</b></span>
+        <span class="tag is-in-trend">В русле тренда сектора</span>
+        <span class="tag is-confirmed">Подтверждено</span>
+      </div>
+      <p class="facts">Отчёт за III квартал 28.10 после закрытия: выручка Azure +48% г/г (было +43%), прогноз на следующий квартал +49–50% в постоянных курсах. Капзатраты 39,4 млрд $ (вдвое больше год к году, но ниже ожиданий), свободный денежный поток около 18,6 млрд $. По данным одного из источников, срок полезного использования ЦОД и зданий продлён с 15 до 25 лет, что снижает отчётные капзатраты. Акции выросли на 2–6% после закрытия.</p>
+      <div class="estimate">
+        <span class="label">Оценка · сигнал для сектора</span>
+        <p>Сильный облачный спрос подтверждает тренд сектора, а реакция на сам Microsoft показывает, что рынок ценит финансирование ИИ из собственных денег. Бухгалтерское продление срока службы активов стоит учитывать при сравнении с конкурентами.</p>
+      </div>
+      <div class="src">Источник: <a href="https://xtb.com/int/market-analysis/news-and-research/microsoft-results-cloud-growth-overshadows-capex-questions" target="_blank" rel="noopener">XTB</a>, <a href="https://www.fool.com/investing/2026/10/28/microsoft-and-alphabet-just-reported-earnings-putting-the-ai-boom-to-the-test/" target="_blank" rel="noopener">Motley Fool</a></div>
+    </article>
+  </section>
+
+  <section id="regions">
+    <h2><span class="n">06</span>По регионам</h2>
+    <div class="regions">
+      <div class="region">
+        <div class="rname">Азия</div>
+        <ul>
+          <li id="asia-close">Nikkei 225 закрылся +1,08% на 63 954 на фоне полупроводников; Kospi +6,63% до 6 012,44 после отчёта SK Hynix, прибыль которого, по данным обзора, выросла почти втрое; Hang Seng +0,23% до 23 094,83. <a href="https://www.cnbc.com/2026/10/27/stock-market-today-live-updates.html" target="_blank" rel="noopener">↗</a></li>
+        </ul>
+      </div>
+      <div class="region">
+        <div class="rname">Еврозона</div>
+        <ul>
+          <li id="eu-fx">Евро торговался вблизи 17-месячных минимумов к доллару перед решением ФРС (FXStreet, 28.10). <a href="https://fxstreet.com/news/euro-steadies-near-17-month-lows-ahead-of-fed-rate-verdict-202610281401" target="_blank" rel="noopener">↗</a></li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <section id="big-picture">
+    <h2><span class="n">07</span>Общая картина</h2>
+    <div class="bigpicture">
+      <div class="label">Интерпретация, не факты</div>
+      <p>Нефть выше 115 $ и повышение ставки в Канаде показывают, что энергетический шок выходит в ставки: ФРС удержала ставку, но двое членов FOMC голосовали за повышение, а рынок закладывает декабрьское повышение с вероятностью 85%. Доходность 10-летних UST около 5% и дорогие ИИ-капзатраты (наказание Alphabet) ужесточают финансовые условия при слабеющем европейском потребителе. Сегодняшний тон ЕЦБ покажет, готов ли Европейский центробанк идти за ФРС.</p>
+      <div class="shifts">
+        <span class="tag shift is-down">Рост: риски вниз</span>
+        <span class="tag shift is-up">Инфляция: выше</span>
+        <span class="tag shift is-up">Ставки: выше дольше</span>
+      </div>
+    </div>
+  </section>
+
+  <section id="outlook">
+    <h2><span class="n">08</span>Календарь</h2>
+
+    <div class="day">
+      <h3>Сегодня · Чт 29.10</h3>
+      <ul class="events">
+        <li class="is-key">
+          <div class="time">13:30</div>
+          <div>
+            <div class="ev">US · ВВП за III квартал, первая оценка</div>
+            <div class="cons">Консенсус: <span class="num">3,2%</span> · пред.: <span class="num">2,2%</span> (аннуализ.; <a href="https://www.kucoin.com/news/flash/us-q3-gdp-and-september-pce-data-to-be-released-on-october-29" target="_blank" rel="noopener">данные обзора</a>)</div>
+            <div class="why">Показывает, выдерживает ли экономика высокие ставки; сильная цифра усилит ставки на повышение в декабре.</div>
+          </div>
+        </li>
+        <li class="is-key">
+          <div class="time">13:30</div>
+          <div>
+            <div class="ev">US · Личные доходы и расходы, сентябрь (PCE)</div>
+            <div class="cons">Ожидание: базовый PCE +0,3% м/м, +3,1% г/г (консенсусы по общему PCE у источников расходятся; <a href="https://www.kucoin.com/news/flash/us-q3-gdp-and-september-pce-data-to-be-released-on-october-29" target="_blank" rel="noopener">данные обзора</a>)</div>
+            <div class="why">Любимый показатель инфляции ФРС: решает, насколько оправдано декабрьское повышение.</div>
+          </div>
+        </li>
+        <li class="is-normal">
+          <div class="time">13:30</div>
+          <div>
+            <div class="ev">US · Первичные заявки на пособие по безработице</div>
+            <div class="cons">Ожидание: консенсус не найден; в фокусе устойчивость рынка труда</div>
+            <div class="why">Косвенный индикатор роста для оценки жёсткости политики.</div>
+          </div>
+        </li>
+        <li class="is-key">
+          <div class="time">14:15</div>
+          <div>
+            <div class="ev">EU · Решение ЕЦБ по ставкам; пресс-конференция Лагард в 14:45</div>
+            <div class="cons">Ожидание: депозитная ставка 2,50% без изменений (<a href="https://www.tmgm.com/de/analysis/market-news/article/ecb-expected-to-pause-in-october-before-hiking-rates-in-december-reuters-poll-202610081239" target="_blank" rel="noopener">опрос Reuters</a>)</div>
+            <div class="why">Сигнал по декабрьскому повышению и по спредам Франции.</div>
+          </div>
+        </li>
+        <li class="is-normal">
+          <div class="time is-session">после закр.</div>
+          <div>
+            <div class="ev">US · Квартальный отчёт Amazon</div>
+            <div class="cons">Ожидание: в фокусе окупаемость ИИ-капзатрат (по превью <a href="https://aiweekly.co/alerts/bloomberg-alphabet-microsoft-meta-earnings-this-week-will-judge-whether-800b-ai" target="_blank" rel="noopener">Bloomberg</a>)</div>
+            <div class="why">Продолжение темы облаков и ИИ после Microsoft и Alphabet.</div>
+          </div>
+        </li>
+      </ul>
+    </div>
+
+    <div class="day">
+      <h3>Пт 30.10</h3>
+      <ul class="events">
+        <li class="is-normal">
+          <div class="time">13:30</div>
+          <div>
+            <div class="ev">US · Индекс стоимости рабочей силы (ECI)</div>
+            <div class="cons">Ожидание: консенсус не найден; в фокусе давление зарплат на инфляцию</div>
+            <div class="why">Зарплатная инфляция влияет на ожидания по ставке ФРС.</div>
+          </div>
+        </li>
+        <li class="is-normal">
+          <div class="time is-session">в течение дня</div>
+          <div>
+            <div class="ev">JP · Решение Банка Японии (дата по данным одного из обзоров)</div>
+            <div class="cons">Ожидание: сохранение 1,00% (<a href="https://cryptoslate.com/predictions/market/bank-of-japan-interest-rate-decision-october-2026/" target="_blank" rel="noopener">рынок прогнозов</a>); часть аналитиков не исключает повышения (<a href="https://stockwirex.com/?p=48587" target="_blank" rel="noopener">StockWireX</a>)</div>
+            <div class="why">Влияет на иену и глобальные доходности.</div>
+          </div>
+        </li>
+      </ul>
+    </div>
+  </section>
+
+</main>
+
+<footer class="wrap">
+  <p>Метки «Оценка» и «Интерпретация» — аналитическое мнение, отделённое от фактов. «По данным СМИ» и «Слухи» — не подтверждено первоисточником.</p>
+  <p>Время везде берлинское.</p>
+</footer>
+
+</body>
+</html>
