@@ -1,10 +1,9 @@
-<!DOCTYPE html>
 <html lang="ru">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="color-scheme" content="light dark">
-<title>Дайджест · 29.10</title>
+<title>Дайджест · 30.10</title>
 <style>
   :root {
     --bg: #fbfaf7;
@@ -258,12 +257,12 @@
 
 <header class="masthead wrap">
   <div class="kicker">Макро и рынки · утренний дайджест</div>
-  <h1>Четверг, 29 октября 2026</h1>
+  <h1>Пятница, 30 октября 2026</h1>
   <div class="meta">
-    <span>Период: 28.10, 06:30 — 29.10, 06:06</span>
-    <span>Подготовлено 06:06 по Берлину</span>
+    <span>Период: 29.10, 06:30 — 30.10, 06:13</span>
+    <span>Подготовлено 06:13 по Берлину</span>
   </div>
-  <p class="lede">ФРС сохранила ставку 3,75–4,00% при двух голосах за повышение, а доходность 10-летних UST держится около 5%; сегодня ЕЦБ в 14:15 по Берлину, как ожидается, оставит ставку по депозитам 2,50%, и внимание будет на сигнале по декабрю.</p>
+  <p class="lede">ФРС, ЕЦБ и Банк Японии сохранили ставки, но сигналы указывают на декабрьское ужесточение; сильные данные США и слабые прогнозы Intel и Amazon запустили распродажу ИИ-акций, в Азии KOSPI теряет около 5%.</p>
 </header>
 
 <nav class="toc" aria-label="Разделы">
@@ -285,27 +284,35 @@
     <h2><span class="n">01</span>Главное</h2>
     <ul class="top">
       <li class="is-high">
-        <div class="headline"><a href="#ecb-decision">ЕЦБ сегодня: ожидается пауза на 2,50%, в фокусе сигнал по декабрю</a><span class="where">Сегодня в фокусе</span></div>
+        <div class="headline"><a href="#fed-hold">ФРС сохранила 3,75–4,00%, два голоса за повышение</a><span class="where">Центробанки</span></div>
         <span class="tag is-high">высокое</span>
       </li>
       <li class="is-high">
-        <div class="headline"><a href="#fed-hold">ФРС оставила ставку 3,75–4,00%, двое проголосовали за повышение</a><span class="where">Центробанки</span></div>
+        <div class="headline"><a href="#ecb-hold">ЕЦБ без изменений, декабрьское повышение в цене</a><span class="where">Центробанки</span></div>
         <span class="tag is-high">высокое</span>
       </li>
       <li class="is-high">
-        <div class="headline"><a href="#oil-brent">Brent выше 115 $ на перебоях поставок с Ближнего Востока</a><span class="where">Энергетика и сырьё</span></div>
+        <div class="headline"><a href="#us-gdp-q3">ВВП США +3,4% выше прогноза, PCE ускорился до 3,6%</a><span class="where">Данные · США</span></div>
         <span class="tag is-high">высокое</span>
       </li>
       <li class="is-high">
-        <div class="headline"><a href="#alphabet-q3">Alphabet: промах по EPS и отрицательный FCF, акции −8–10% после закрытия</a><span class="where">Технологии и ИИ-инфраструктура</span></div>
+        <div class="headline"><a href="#intel-q3">Intel: слабый прогноз IV кв., акции −16–21% в постмаркете</a><span class="where">Полупроводники</span></div>
+        <span class="tag is-high">высокое</span>
+      </li>
+      <li class="is-high">
+        <div class="headline"><a href="#amzn-q3">Amazon: AWS +39%, но прогноз выручки ниже ожиданий</a><span class="where">Интернет и облако</span></div>
+        <span class="tag is-high">высокое</span>
+      </li>
+      <li class="is-high">
+        <div class="headline"><a href="#ai-selloff">Распродажа ИИ-акций: Nasdaq −1,38%, KOSPI около −5%</a><span class="where">Рыночный стресс</span></div>
+        <span class="tag is-high">высокое</span>
+      </li>
+      <li class="is-high">
+        <div class="headline"><a href="#oil-hormuz">Brent $114,88 на фоне рисков в Ормузе</a><span class="where">Энергетика и сырьё</span></div>
         <span class="tag is-high">высокое</span>
       </li>
       <li class="is-medium">
-        <div class="headline"><a href="#msft-q3">Microsoft: Azure +48%, капекс ниже ожиданий, акции растут</a><span class="where">Технологии и ИИ-инфраструктура</span></div>
-        <span class="tag is-medium">среднее</span>
-      </li>
-      <li class="is-medium">
-        <div class="headline"><a href="#boc-hike">Банк Канады повысил ставку до 2,5%, допустил продолжение</a><span class="where">Центробанки</span></div>
+        <div class="headline"><a href="#boj-hold">Банк Японии: 1,25%, один голос за повышение</a><span class="where">Центробанки</span></div>
         <span class="tag is-medium">среднее</span>
       </li>
     </ul>
@@ -314,62 +321,86 @@
   <section id="markets">
     <h2><span class="n">02</span>Рынки</h2>
     <div class="markets">
-      <div class="tile is-up">
-        <div class="name">UST 10 лет</div>
-        <div class="value">5,02%</div>
-        <div class="chg">+3 б.п.</div>
-        <div class="asof">закр. 28.10</div>
+      <div class="tile is-down">
+        <div class="name">US 10y</div>
+        <div class="value">4,988%</div>
+        <div class="chg">−5,6 б.п.</div>
+        <div class="asof">закр. 29.10</div>
       </div>
       <div class="tile is-up">
+        <div class="name">EUR/USD</div>
+        <div class="value">1,1181</div>
+        <div class="chg">+0,46%</div>
+        <div class="asof">закр. 29.10</div>
+      </div>
+      <div class="tile is-down">
+        <div class="name">DXY</div>
+        <div class="value">101,87</div>
+        <div class="chg">−0,31%</div>
+        <div class="asof">закр. 29.10</div>
+      </div>
+      <div class="tile is-down">
         <div class="name">Brent</div>
-        <div class="value">115,32 $</div>
-        <div class="chg">+1,0%</div>
-        <div class="asof">расчётная цена 28.10</div>
+        <div class="value">$114,88</div>
+        <div class="chg">−0,38%</div>
+        <div class="asof">закр. 29.10</div>
       </div>
-      <div class="tile is-up">
+      <div class="tile is-down">
         <div class="name">WTI</div>
-        <div class="value">102,78 $</div>
-        <div class="chg">+3,0%</div>
-        <div class="asof">расчётная цена 28.10</div>
+        <div class="value">$102,00</div>
+        <div class="chg">−0,76%</div>
+        <div class="asof">закр. 29.10</div>
       </div>
-      <div class="tile is-up">
-        <div class="name">S&amp;P 500</div>
-        <div class="value">7 743,97</div>
-        <div class="chg">+0,28%</div>
-        <div class="asof">закр. 28.10</div>
+      <div class="tile is-down">
+        <div class="name">Золото (дек.)</div>
+        <div class="value">$4 031,40</div>
+        <div class="chg">−0,50%</div>
+        <div class="asof">закр. 29.10</div>
       </div>
-      <div class="tile is-up">
-        <div class="name">Dow Jones</div>
-        <div class="value">52 475,10</div>
-        <div class="chg">+0,19%</div>
-        <div class="asof">закр. 28.10</div>
+      <div class="tile is-down">
+        <div class="name">S&amp;amp;P 500</div>
+        <div class="value">7 720</div>
+        <div class="chg">−0,31%</div>
+        <div class="asof">закр. 29.10</div>
       </div>
-      <div class="tile is-up">
+      <div class="tile is-down">
         <div class="name">Nasdaq Composite</div>
-        <div class="value">26 549,85</div>
-        <div class="chg">+0,27%</div>
-        <div class="asof">закр. 28.10</div>
+        <div class="value">26 184</div>
+        <div class="chg">−1,38%</div>
+        <div class="asof">закр. 29.10</div>
       </div>
       <div class="tile is-up">
+        <div class="name">STOXX 600</div>
+        <div class="value">649,11</div>
+        <div class="chg">+0,77%</div>
+        <div class="asof">закр. 29.10</div>
+      </div>
+      <div class="tile is-up">
+        <div class="name">DAX</div>
+        <div class="value">26 052,75</div>
+        <div class="chg">+1,38%</div>
+        <div class="asof">закр. 29.10</div>
+      </div>
+      <div class="tile is-down">
+        <div class="name">KOSPI</div>
+        <div class="value">5 654,61</div>
+        <div class="chg">−4,77%</div>
+        <div class="asof">30.10, 02:40</div>
+      </div>
+      <div class="tile is-down">
         <div class="name">Nikkei 225</div>
-        <div class="value">63 954</div>
-        <div class="chg">+1,08%</div>
-        <div class="asof">закр. 28.10</div>
-      </div>
-      <div class="tile is-up">
-        <div class="name">Kospi</div>
-        <div class="value">6 012,44</div>
-        <div class="chg">+6,63%</div>
-        <div class="asof">закр. 28.10</div>
+        <div class="value">62 960,60</div>
+        <div class="chg">−2,6%</div>
+        <div class="asof">30.10, внутри дня</div>
       </div>
       <div class="tile is-up">
         <div class="name">Hang Seng</div>
-        <div class="value">23 094,83</div>
-        <div class="chg">+0,23%</div>
-        <div class="asof">закр. 28.10</div>
+        <div class="value">—</div>
+        <div class="chg">+1,5%</div>
+        <div class="asof">30.10, внутри дня</div>
       </div>
     </div>
-    <p class="note">Источники: <a href="https://lufkindailynews.com/news_reuters/business/global-stocks-hold-gains-after-fed-decision-oil-prices-rise/article_83a86c22-7fed-5223-a82f-bc1d7c12ea30.html" target="_blank" rel="noopener">Reuters</a>, <a href="https://www.bnnbloomberg.ca/markets/2026/10/28/us-stocks-remains-steady-after-fed-says-it-wont-raise-interest-rates/" target="_blank" rel="noopener">BNN Bloomberg</a>, <a href="https://www.cnbc.com/2026/10/27/stock-market-today-live-updates.html" target="_blank" rel="noopener">CNBC</a>, <a href="https://bbntimes.com/companies/hong-kong-stock-exchange-hang-seng-index-rises-to-23-094-83-as-lenovo-leads-an-ai-hardware-rebound" target="_blank" rel="noopener">BBN Times</a>. Доходность 10-летних UST у источников расходится (5,02% и 5,05%). Уровни EUR/USD, Bund, золота, DAX и Euro Stoxx 50 за 28.10 найти не удалось; евро, по данным <a href="https://fxstreet.com/news/euro-steadies-near-17-month-lows-ahead-of-fed-rate-verdict-202610281401" target="_blank" rel="noopener">FXStreet</a>, держится вблизи 17-месячных минимумов.</p>
+    <p class="note">Источники: <a href="https://investrade.com/market-review-october-29-2026/" target="_blank" rel="noopener">Investrade (США, нефть, золото)</a>, <a href="https://cappnotes.substack.com/p/closing-look-thursday-october-29" target="_blank" rel="noopener">Closing Look (EUR/USD, DXY)</a>, <a href="https://live.euronext.com/en/financial-news/european-shares-close-seven-week-high-after-ecb-pause-lagarde-resigns" target="_blank" rel="noopener">Reuters / Euronext (STOXX 600)</a>, <a href="https://www.ad-hoc-news.de/boerse/news/marktberichte/dax-closes-1-38-percent-higher-at-26-052-75-after-ecb-decision/70430470" target="_blank" rel="noopener">Ad-hoc-news (DAX)</a>, <a href="https://www.fxstreet.com/news/asian-stocks-trade-mixed-kospi-leads-losses-as-worries-about-ai-grow-202610300439" target="_blank" rel="noopener">FXStreet (Азия)</a>.</p>
   </section>
 
   <section id="data">
@@ -387,131 +418,178 @@
           </tr>
         </thead>
         <tbody>
-          <tr id="us-conf-board">
-            <td class="what"><a href="https://finance.yahoo.com/markets/stocks/articles/stock-market-news-oct-28-081900420.html" target="_blank" rel="noopener">US · Доверие потребителей Conference Board</a><small>октябрь · 27.10, 15:00</small></td>
-            <td class="r num actual">91,7</td>
-            <td class="r num">82,8</td>
-            <td class="r num">84,2<small class="rev">пересм. с 81,9</small></td>
+          <tr id="us-gdp-q3">
+            <td class="what"><a href="https://www.bea.gov/news/2026/gdp-advance-estimate-3rd-quarter-2026" target="_blank" rel="noopener">US · ВВП, предв. оценка</a><small>III кв., в годовом выражении · 29.10, 13:30</small></td>
+            <td class="r num actual">+3,4%</td>
+            <td class="r num">+3,1%</td>
+            <td class="r num">+2,2%</td>
             <td><span class="flag is-above">▲ Выше</span></td>
-            <td><span class="tag is-low">низкое</span></td>
+            <td><span class="tag is-high">высокое</span></td>
+          </tr>
+          <tr id="us-pce-sep">
+            <td class="what"><a href="https://invezz.com/news/2026/10/29/pce-inflation-accelerates-to-3-6-as-gdp-growth-beats-estimates-jobless-claims-fall/" target="_blank" rel="noopener">US · Индекс цен PCE, г/г</a><small>сентябрь · 29.10, 13:30</small></td>
+            <td class="r num actual">+3,6%</td>
+            <td class="r num">—</td>
+            <td class="r num">+3,4%</td>
+            <td>—</td>
+            <td><span class="tag is-high">высокое</span></td>
+          </tr>
+          <tr id="us-core-pce-sep">
+            <td class="what"><a href="https://invezz.com/news/2026/10/29/pce-inflation-accelerates-to-3-6-as-gdp-growth-beats-estimates-jobless-claims-fall/" target="_blank" rel="noopener">US · Базовый PCE, г/г</a><small>сентябрь · 29.10, 13:30</small></td>
+            <td class="r num actual">+3,1%</td>
+            <td class="r num">—</td>
+            <td class="r num">+3,0%</td>
+            <td>—</td>
+            <td><span class="tag is-high">высокое</span></td>
           </tr>
         </tbody>
       </table>
     </div>
-    <p class="note">Данные вышли до начала периода и включены, поскольку попали в обзоры рынка 28.10; консенсус по оценке Zacks. <a href="https://finance.yahoo.com/markets/stocks/articles/stock-market-news-oct-28-081900420.html" target="_blank" rel="noopener">↗</a></p>
+    <p class="note">Консенсус по ВВП — опрос по данным Invezz (Babypips приводит +3,2%); консенсус по PCE найти не удалось. <a href="https://invezz.com/news/2026/10/29/pce-inflation-accelerates-to-3-6-as-gdp-growth-beats-estimates-jobless-claims-fall/" target="_blank" rel="noopener">↗</a></p>
   </section>
 
   <section id="policy">
     <h2><span class="n">04</span>Макро и политика</h2>
 
-    <article class="card is-preview" id="ecb-decision">
-      <span class="kicker">Сегодня в фокусе · 14:15</span>
-      <h4><a href="https://www.euinsider.eu/news/ecb-thursday-hold-inflation-38-lagarde-exit-2026" target="_blank" rel="noopener">ЕЦБ: решение по ставкам (пресс-конференция Лагард в 14:45)</a></h4>
-      <div class="tags">
-        <span class="tag is-high">Влияние: высокое</span>
-      </div>
-      <dl>
-        <dt>Ожидания</dt><dd>Сохранение ставки по депозитам на 2,50%: 70 из 73 экономистов в опросе Reuters от 5–8.10 ждут паузу, 64 из 73 — повышения на 25 б.п. в декабре. Инфляция в еврозоне в сентябре 3,8% (Eurostat); ЕЦБ повышал ставку дважды с июня. <a href="https://www.tmgm.com/de/analysis/market-news/article/ecb-expected-to-pause-in-october-before-hiking-rates-in-december-reuters-poll-202610081239" target="_blank" rel="noopener">Опрос Reuters</a>, <a href="https://www.euinsider.eu/news/ecb-thursday-hold-inflation-38-lagarde-exit-2026" target="_blank" rel="noopener">EU Insider</a>.</dd>
-        <dt>Что удивит</dt><dd>Повышение уже сегодня; явный сигнал на декабрь или, наоборот, смягчение риторики; реакция на расширение спреда Франции к Бунду (около 147–152 б.п. в начале октября, <a href="https://www.babypips.com/news/explainer-why-the-oat-bund-spread-matters-for-the-euro-2026-10-12" target="_blank" rel="noopener">BabyPips</a>); по версии аналитиков Danske, Лагард может объявить о досрочном уходе (не подтверждено).</dd>
-      </dl>
-      <div class="estimate">
-        <span class="label">Оценка · реакция рынка</span>
-        <p>Пауза уже в цене, поэтому рынок отреагирует на формулировки: жёсткий сигнал на декабрь поддержит евро и поднимет доходности, но усилит давление на периферию, прежде всего на Францию. Мягкий тон при инфляции 3,8% ослабит евро, которое и так у минимумов.</p>
-      </div>
-      <div class="src">Источник: <a href="https://www.euinsider.eu/news/ecb-thursday-hold-inflation-38-lagarde-exit-2026" target="_blank" rel="noopener">EU Insider</a>, <a href="https://www.tmgm.com/de/analysis/market-news/article/ecb-expected-to-pause-in-october-before-hiking-rates-in-december-reuters-poll-202610081239" target="_blank" rel="noopener">Reuters (через TMGM)</a></div>
-    </article>
-
     <h3 class="subhead">Центробанки</h3>
     <article class="card is-high" id="fed-hold">
-      <h4><a href="https://www.cnn.com/2026/10/28/business/live-news/federal-reserve-interest-rate-october" target="_blank" rel="noopener">ФРС сохранила ставку 3,75–4,00%, Кук и Хэммак голосовали за повышение</a></h4>
+      <h4><a href="https://www.cnbc.com/2026/10/28/fed-interest-rate-decision-october-2026.html" target="_blank" rel="noopener">ФРС сохранила ставку 3,75–4,00%, двое проголосовали за повышение</a></h4>
       <div class="tags">
         <span class="tag is-high">Влияние: высокое</span>
-        <span class="tag is-mixed">Смешанно: + доллар, − облигации и заёмщики</span>
+        <span class="tag is-negative">Негатив: облигации и акции роста (риск ужесточения)</span>
         <span class="tag">Масштаб: <b>Глобально</b></span>
-        <span class="tag">Сюрприз: <b>нет, пауза в цене</b></span>
+        <span class="tag">Сюрприз: <b>нет, пауза ожидалась; два голоса за повышение</b></span>
         <span class="tag is-confirmed">Подтверждено</span>
       </div>
-      <p class="facts">Решение FOMC 28.10 (19:00 по Берлину), голосование 10–2: Лиза Кук и Бет Хэммак выступили за повышение на 25 б.п. В заявлении: «Inflation remains elevated». Председатель Кевин Уорш на пресс-конференции заявил, что ФРС хочет увидеть, как сложатся условия, прежде чем делать следующий шаг; доходность 2-летних UST опускалась до 4,69%. По CME FedWatch вероятность повышения в декабре 85,0% против 78,3% днём ранее.</p>
+      <p class="facts">(объявлено 28.10, вечером по Берлину) ФРС оставила диапазон 3,75–4,00% при голосовании 10–2: Лиза Кук и Бет Хаммак выступили за повышение на 0,25 п.п. Формулировка о том, что инфляция «остаётся повышенной», сохранена, экономическая активность названа растущей «сильными темпами». Председатель Кевин Уорш отказался давать прямой прогноз по ставке.</p>
       <div class="estimate">
         <span class="label">Оценка · последствия</span>
-        <p>Два голоса за повышение и цена в 85% на декабрь означают, что стоимость заимствования останется высокой: давление на ипотеку, корпоративный долг и бюджетные расходы на обслуживание долга США. Для доллара и банковских маржей эффект поддерживающий, для длинных облигаций и акций роста — негативный.</p>
+        <p>Пауза ожидалась, но два голоса «за» повышение сдвигают баланс в сторону ужесточения: рынок закладывает возможное повышение в декабре. Это поддерживает доходности и доллар, давит на оценки в технологическом секторе и на рынок жилья через ипотечные ставки.</p>
       </div>
-      <div class="src">Источник: <a href="https://www.cnn.com/2026/10/28/business/live-news/federal-reserve-interest-rate-october" target="_blank" rel="noopener">CNN</a>, <a href="https://www.cnbc.com/2026/10/28/fed-interest-rate-decision-october-2026.html" target="_blank" rel="noopener">CNBC</a>, <a href="https://www.bnnbloomberg.ca/markets/2026/10/28/us-stocks-remains-steady-after-fed-says-it-wont-raise-interest-rates/" target="_blank" rel="noopener">BNN Bloomberg</a></div>
+      <div class="src">Источник: <a href="https://www.cnbc.com/2026/10/28/fed-interest-rate-decision-october-2026.html" target="_blank" rel="noopener">CNBC</a>, <a href="https://www.babypips.com/news/headline-us-q3-gdp-core-pce-december-fed-rate-hike-focus-2026-10-30" target="_blank" rel="noopener">Babypips</a></div>
     </article>
-
-    <article class="card is-medium" id="boc-hike">
-      <h4><a href="https://www.bnnbloomberg.ca/business/economics/2026/10/28/bank-of-canada-raises-interest-rate-as-inflation-projected-to-worsen/" target="_blank" rel="noopener">Банк Канады повысил ставку на 25 б.п. до 2,5%</a></h4>
+    <article class="card is-high" id="ecb-hold">
+      <h4><a href="https://en.sedaily.com/international/2026/10/29/ecb-holds-rate-at-25-percent-as-french-bond-turmoil-offsets" target="_blank" rel="noopener">ЕЦБ сохранил ставку по депозитам 2,50%, рынок закладывает повышение в декабре</a></h4>
+      <div class="tags">
+        <span class="tag is-high">Влияние: высокое</span>
+        <span class="tag is-mixed">Смешанно: + евро и облигации ядра, − участники, ждущие повышения в декабре</span>
+        <span class="tag">Масштаб: <b>Глобально</b></span>
+        <span class="tag">Сюрприз: <b>нет, пауза ожидалась; сигнал по декабрю жёстче</b></span>
+        <span class="tag is-confirmed">Подтверждено</span>
+      </div>
+      <p class="facts">29.10 ЕЦБ оставил ставку по депозитам 2,50%, по основным операциям 2,65%, по маржинальным кредитам 2,90%. В заявлении сказано, что «полное влияние энергетического шока продолжает проявляться»; заранее определённого пути ставок совет не обозначил. В этом году ЕЦБ уже дважды повышал ставки, в июне и в сентябре. По данным одного источника, фьючерсы на 29.10 оценивали вероятность повышения до 2,75% в декабре примерно в 82%. По данным СМИ, Кристин Лагард уйдёт в отставку в феврале.</p>
+      <div class="estimate">
+        <span class="label">Оценка · последствия</span>
+        <p>Пауза в сочетании с угрозой декабрьского повышения удерживает доходности высокими, но снимает часть давления с долга Франции и Италии: европейские акции закрылись у семинедельного максимума. Для банков это поддержка маржи, для импортёров энергии и ипотечных заёмщиков в еврозоне ставки останутся тяжёлыми. Смена главы ЕЦБ добавляет неопределённости по траектории политики.</p>
+      </div>
+      <div class="src">Источник: <a href="https://en.sedaily.com/international/2026/10/29/ecb-holds-rate-at-25-percent-as-french-bond-turmoil-offsets" target="_blank" rel="noopener">Seoul Economic Daily</a>, <a href="https://www.ebc.com/forex/ecb-interest-rate-decision-october-2026" target="_blank" rel="noopener">EBC</a>, <a href="https://live.euronext.com/en/financial-news/european-shares-close-seven-week-high-after-ecb-pause-lagarde-resigns" target="_blank" rel="noopener">Reuters / Euronext</a></div>
+    </article>
+    <article class="card is-medium" id="boj-hold">
+      <h4><a href="https://www.indexbox.io/blog/bank-of-japan-holds-rates-at-125-revises-inflation-forecast-higher/" target="_blank" rel="noopener">Банк Японии сохранил ставку 1,25% при одном голосе за повышение</a></h4>
       <div class="tags">
         <span class="tag is-medium">Влияние: среднее</span>
-        <span class="tag is-mixed">Смешанно: + канадский доллар, − заёмщики и ипотека</span>
+        <span class="tag is-positive">Позитив: иена (поддержка), банки Японии</span>
         <span class="tag">Масштаб: <b>Страна</b></span>
-        <span class="tag">Сюрприз: <b>частично: ожидания по данным источников расходились</b></span>
+        <span class="tag">Сюрприз: <b>нет, пауза ожидалась; ястребиный тон</b></span>
         <span class="tag is-confirmed">Подтверждено</span>
       </div>
-      <p class="facts">Решение 28.10 (14:45 по Берлину): первое изменение ставки после семи пауз подряд и первое повышение с июля 2023. Макклем: шаг нужен, чтобы энергетические цены не перешли в общую инфляцию. Прогноз инфляции на 2027 повышен до 3,1% с 2,0%, к концу года ожидается 3,5%; будущие решения — «по одному заседанию». Часть экономистов возражала: базовая инфляция около 2%.</p>
+      <p class="facts">30.10 Банк Японии оставил ставку 1,25%, голосование 8–1: Хадзимэ Таката предложил повысить до 1,50%. В квартальном отчёте прогноз базовой инфляции на 2027 финансовый год повышен до 2,6%, риски для цен названы смещёнными вверх. Темп продажи ETF с января 2027 увеличен более чем вдвое, примерно до 860 млрд иен в год. Перед решением USD/JPY держался около 157,8.</p>
       <div class="estimate">
         <span class="label">Оценка · последствия</span>
-        <p>Центробанк реагирует на нефтяной шок, а не на базовую инфляцию, и это сигнал для других импортёров энергии. Дороже станут ипотека и кредиты в Канаде; курс канадского доллара получает поддержку.</p>
+        <p>Один голос за повышение и повышенный прогноз инфляции подкрепляют ожидания декабрьского шага (рынок, по данным СМИ, закладывает около 80%). Для иены это умеренная поддержка, для японских экспортёров — риск укрепления валюты, для JGB — давление вверх по доходности.</p>
       </div>
-      <div class="src">Источник: <a href="https://www.bnnbloomberg.ca/business/economics/2026/10/28/bank-of-canada-raises-interest-rate-as-inflation-projected-to-worsen/" target="_blank" rel="noopener">BNN Bloomberg</a>, <a href="https://www.cbc.ca/news/business/livestory/bank-of-canada-interest-rate-announcement-oct-28-9.7398140" target="_blank" rel="noopener">CBC</a></div>
+      <div class="src">Источник: <a href="https://www.indexbox.io/blog/bank-of-japan-holds-rates-at-125-revises-inflation-forecast-higher/" target="_blank" rel="noopener">IndexBox</a>, <a href="https://investinglive.com/central-banks/boj-keeps-policy-rate-unchanged-at-1-25-as-expected/" target="_blank" rel="noopener">investingLive</a></div>
     </article>
-
     <h3 class="subhead">Энергетика и сырьё</h3>
-    <article class="card is-high" id="oil-brent">
-      <h4><a href="https://lufkindailynews.com/news_reuters/business/global-stocks-hold-gains-after-fed-decision-oil-prices-rise/article_83a86c22-7fed-5223-a82f-bc1d7c12ea30.html" target="_blank" rel="noopener">Brent выше 115 $: перебои поставок с Ближнего Востока</a></h4>
+    <article class="card is-high" id="oil-hormuz">
+      <h4><a href="https://www.cnbc.com/2026/10/29/oil-price-today-wti-brent.html" target="_blank" rel="noopener">Brent закрылась на $114,88: премия за риск Ормузского пролива сохраняется</a></h4>
       <div class="tags">
         <span class="tag is-high">Влияние: высокое</span>
         <span class="tag is-mixed">Смешанно: + экспортёры нефти, − импортёры и инфляция</span>
         <span class="tag">Масштаб: <b>Глобально</b></span>
-        <span class="tag">Сюрприз: <b>нет, продолжение роста</b></span>
+        <span class="tag">Сюрприз: <b>нет, цены остаются на высоком уровне</b></span>
         <span class="tag is-confirmed">Подтверждено</span>
       </div>
-      <p class="facts">Brent 28.10 закрылся на 115,32 $ (+1%), WTI — на 102,78 $ (+3%) на опасениях по поставкам с Ближнего Востока (Reuters); по другим источникам, Brent около 115,67 $ внутри дня. Всемирный банк в обзоре Commodity Markets Outlook (28.10) прогнозирует рост цен на сырьё в 2026 на 23%.</p>
+      <p class="facts">29.10 Brent подешевела на 44 цента до $114,88 за баррель, WTI — на 78 цента, до $102. Снижение связано с новыми попытками США и Ирана вести переговоры. По данным Reuters, Brent идёт к росту за октябрь на 11,5%, четвёртому месячному росту подряд.</p>
       <div class="estimate">
         <span class="label">Оценка · последствия</span>
-        <p>Дорогая нефть поддерживает инфляцию и объясняет повышения ставок в Канаде и еврозоне и жёсткий тон ФРС. Для импортёров энергии это налог на потребление и ухудшение торгового баланса, для нефтяных компаний и экспортёров — рост доходов.</p>
+        <p>Нефть выше $100 остаётся главным инфляционным риском: она тянет вверх энергетическую часть инфляции в еврозоне (3,8% в сентябре) и подпирает аргументы за ужесточение ЕЦБ и ФРС. Срыв переговоров вернёт цены к росту.</p>
       </div>
-      <div class="src">Источник: <a href="https://lufkindailynews.com/news_reuters/business/global-stocks-hold-gains-after-fed-decision-oil-prices-rise/article_83a86c22-7fed-5223-a82f-bc1d7c12ea30.html" target="_blank" rel="noopener">Reuters</a>, <a href="https://worldbank.org/en/news/press-release/2026/10/28/commodity-markets-outlook-october-2026" target="_blank" rel="noopener">Всемирный банк</a></div>
+      <div class="src">Источник: <a href="https://www.cnbc.com/2026/10/29/oil-price-today-wti-brent.html" target="_blank" rel="noopener">CNBC</a>, <a href="https://investrade.com/market-review-october-29-2026/" target="_blank" rel="noopener">Investrade</a></div>
+    </article>
+    <h3 class="subhead">Фискальная политика и долг</h3>
+    <article class="card is-medium" id="fr-oat">
+      <h4><a href="https://www.fxstreet.com/analysis/france-tests-the-euros-nerve-what-the-oat-spread-is-telling-fx-traders-202610270406" target="_blank" rel="noopener">Франция: спред OAT–Bund расширился до максимума с 2011 года</a></h4>
+      <div class="tags">
+        <span class="tag is-medium">Влияние: среднее</span>
+        <span class="tag is-negative">Негатив: французские гособлигации, евро</span>
+        <span class="tag">Масштаб: <b>Страна</b></span>
+        <span class="tag">Сюрприз: <b>нет, спред расширялся весь месяц</b></span>
+        <span class="tag is-reported">По данным СМИ</span>
+      </div>
+      <p class="facts">По данным FXStreet, 10-летний спред OAT–Bund 22.10 достигал около 178 б.п., максимума с конца 2011 года, а 26.10 снизился до около 156 б.п. Moody&#x27;s 23.10 сохранило рейтинг Aa3 с негативным прогнозом. Итог голосований по бюджету 2027 в Национальном собрании подтвердить не удалось.</p>
+      <div class="estimate">
+        <span class="label">Оценка · последствия</span>
+        <p>Бюджетная неопределённость во Франции остаётся источником стресса в еврозоне: сужение спреда ниже 150 б.п. стало бы признаком спада политической премии. Пауза ЕЦБ в четверг сняла часть давления.</p>
+      </div>
+      <div class="src">Источник: <a href="https://www.fxstreet.com/analysis/france-tests-the-euros-nerve-what-the-oat-spread-is-telling-fx-traders-202610270406" target="_blank" rel="noopener">FXStreet</a></div>
+    </article>
+    <h3 class="subhead">Рыночный стресс</h3>
+    <article class="card is-high" id="ai-selloff">
+      <h4><a href="https://www.fxstreet.com/news/asian-stocks-trade-mixed-kospi-leads-losses-as-worries-about-ai-grow-202610300439" target="_blank" rel="noopener">Распродажа ИИ-акций: Nasdaq −1,38%, KOSPI около −5%</a></h4>
+      <div class="tags">
+        <span class="tag is-high">Влияние: высокое</span>
+        <span class="tag is-negative">Негатив: акции технологий и чипмейкеры, KOSPI</span>
+        <span class="tag">Масштаб: <b>Глобально</b></span>
+        <span class="tag">Сюрприз: <b>нет, но распродажа глубже ожиданий</b></span>
+        <span class="tag is-reported">По данным СМИ</span>
+      </div>
+      <p class="facts">29.10 Nasdaq Composite потерял 1,38% до 26 184, S&amp;P 500 — 0,31% до 7 720. 30.10 в Азии KOSPI в начале сессии снижался примерно на 4,8–5%, акции Samsung Electronics и SK Hynix падали (размеры падения в источниках расходятся). Nikkei 225 снижался на 0,7–2,8%, Hang Seng вырос примерно на 1,5%.</p>
+      <div class="estimate">
+        <span class="label">Оценка · последствия</span>
+        <p>Слабые прогнозы Amazon и Intel подтолкнули инвесторов выходить из ИИ-связанных бумаг; на KOSPI это особенно заметно, так как Samsung и SK Hynix составляют около половины рыночной капитализации индекса. Пока это коррекция в секторе, а не системный стресс: казначейские облигации выросли, доллар ослаб.</p>
+      </div>
+      <div class="src">Источник: <a href="https://www.fxstreet.com/news/asian-stocks-trade-mixed-kospi-leads-losses-as-worries-about-ai-grow-202610300439" target="_blank" rel="noopener">FXStreet</a>, <a href="https://investrade.com/market-review-october-29-2026/" target="_blank" rel="noopener">Investrade</a></div>
     </article>
   </section>
 
   <section id="companies">
     <h2><span class="n">05</span>Компании по секторам</h2>
-    <h3 class="subhead">Технологии и ИИ-инфраструктура</h3>
-    <article class="card is-high" id="alphabet-q3">
-      <h4><a href="https://investinglive.com/stocks/alphabet-slides-over-9-after-hours-as-search-miss-and-9bn-cash-burn-overshadow-cloud/" target="_blank" rel="noopener">Alphabet: промах по EPS и отрицательный свободный денежный поток</a></h4>
+    <h3 class="subhead">Полупроводники</h3>
+    <article class="card is-high" id="intel-q3">
+      <h4><a href="https://www.sec.gov/Archives/edgar/data/0000050863/000005086326000188/q326earningsrelease.htm" target="_blank" rel="noopener">Intel: прогноз на IV квартал ниже ожиданий</a></h4>
       <div class="tags">
         <span class="tag is-high">Влияние: высокое</span>
-        <span class="tag is-mixed">Смешанно: − Alphabet, + поставщики ИИ-оборудования</span>
+        <span class="tag is-negative">Негатив: Intel, поставщики для ПК, чипмейкеры</span>
         <span class="tag">Масштаб: <b>Сектор</b></span>
-        <span class="tag">Сюрприз: <b>да, EPS ниже консенсуса</b></span>
-        <span class="tag is-unclear-trend">Тренд сектора неоднозначен</span>
-        <span class="tag is-reported">По данным СМИ</span>
+        <span class="tag">Сюрприз: <b>нет, прогноз Q4 сильно ниже консенсуса</b></span>
+        <span class="tag is-against-trend">Против тренда сектора</span>
+        <span class="tag is-confirmed">Подтверждено</span>
       </div>
-      <p class="facts">Отчёт за III квартал 28.10 после закрытия: скорректированная прибыль на акцию 2,67 $ против 3,02 $ ожидавшихся; Google Cloud, по данным обзора, +103% при операционной прибыли 11,1 млрд $ и выручке 30,7 млрд $. Капзатраты около 51,4 млрд $, свободный денежный поток −9,07 млрд $; прогноз капзатрат на 2026 — 195–205 млрд $, на 2027 финдиректор обещает значительный рост. Акции упали примерно на 8–10% после закрытия (по данным СМИ).</p>
+      <p class="facts">29.10, после закрытия США, Intel отчиталась за III квартал: выручка $16,5 млрд (+21% г/г), скорректированная прибыль на акцию $0,52 против консенсуса $0,40; выручка Data Center и AI $7,32 млрд (+78%). Прогноз на IV квартал: выручка $15,0–16,0 млрд при консенсусе около $17,05 млрд, прибыль на акцию около $0,25 против $0,43. Руководство ожидает, что замедление рынка ПК сохранится в первой половине следующего года. Акции в постмаркете падали на 16–21% (источники расходятся).</p>
       <div class="estimate">
         <span class="label">Оценка · сигнал для сектора</span>
-        <p>Рынок разделяет «рост облака» и «стоимость ИИ»: наращивание капзатрат при отрицательном FCF наказывается. Для поставщиков чипов и центров обработки данных высокие капзатраты остаются спросом, но для крупных облачных компаний растёт требование к окупаемости.</p>
+        <p>Слабый спрос на ПК и инцидент на заводе в Израиле бьют по цепочке поставок ПК, а сильный рост дата-центров показывает, что ИИ-спрос остаётся опорой сектора. Новость выбивается из тренда сильного года для ИИ-чипов, но не из тренда слабого рынка ПК.</p>
       </div>
-      <div class="src">Источник: <a href="https://investinglive.com/stocks/alphabet-slides-over-9-after-hours-as-search-miss-and-9bn-cash-burn-overshadow-cloud/" target="_blank" rel="noopener">InvestingLive</a>, <a href="https://www.fool.com/investing/2026/10/28/microsoft-and-alphabet-just-reported-earnings-putting-the-ai-boom-to-the-test/" target="_blank" rel="noopener">Motley Fool</a></div>
+      <div class="src">Источник: <a href="https://www.sec.gov/Archives/edgar/data/0000050863/000005086326000188/q326earningsrelease.htm" target="_blank" rel="noopener">Intel / SEC</a>, <a href="https://www.benzinga.com/markets/earnings/26/10/62718733/intel-stock-crashes-after-q3-earnings-what-you-need-to-know" target="_blank" rel="noopener">Benzinga</a></div>
     </article>
-
-    <article class="card is-medium" id="msft-q3">
-      <h4><a href="https://xtb.com/int/market-analysis/news-and-research/microsoft-results-cloud-growth-overshadows-capex-questions" target="_blank" rel="noopener">Microsoft: Azure ускорился до +48%, капзатраты ниже ожиданий</a></h4>
+    <h3 class="subhead">Интернет и облачные сервисы</h3>
+    <article class="card is-high" id="amzn-q3">
+      <h4><a href="https://www.geekwire.com/2026/aws-growth-hits-39-its-fastest-in-nearly-five-years-as-amazon-misses-on-earnings/" target="_blank" rel="noopener">Amazon: AWS ускорился до 39%, но прогноз выручки разочаровал</a></h4>
       <div class="tags">
-        <span class="tag is-medium">Влияние: среднее</span>
-        <span class="tag is-positive">Позитив: Microsoft, облачный сектор</span>
-        <span class="tag">Масштаб: <b>Сектор</b></span>
-        <span class="tag">Сюрприз: <b>да, капзатраты ниже ожиданий</b></span>
+        <span class="tag is-high">Влияние: высокое</span>
+        <span class="tag is-mixed">Смешанно: + AWS и облачные поставщики, − акционеры Amazon из-за прогноза и капекса</span>
+        <span class="tag">Масштаб: <b>Компания</b></span>
+        <span class="tag">Сюрприз: <b>да, EPS и прогноз ниже консенсуса</b></span>
         <span class="tag is-in-trend">В русле тренда сектора</span>
         <span class="tag is-confirmed">Подтверждено</span>
       </div>
-      <p class="facts">Отчёт за III квартал 28.10 после закрытия: выручка Azure +48% г/г (было +43%), прогноз на следующий квартал +49–50% в постоянных курсах. Капзатраты 39,4 млрд $ (вдвое больше год к году, но ниже ожиданий), свободный денежный поток около 18,6 млрд $. По данным одного из источников, срок полезного использования ЦОД и зданий продлён с 15 до 25 лет, что снижает отчётные капзатраты. Акции выросли на 2–6% после закрытия.</p>
+      <p class="facts">29.10, после закрытия США, Amazon сообщила о выручке $201,9 млрд при консенсусе $202,3 млрд и EPS $1,89 (ниже консенсуса около $1,96–1,97). Выручка AWS около $46 млрд (+39%, быстрейший рост почти за пять лет), операционная прибыль AWS $17,8 млрд, операционная маржа группы 13,9%. Прогноз выручки на IV квартал в середине диапазона около $243,5 млрд против консенсуса $244,2 млрд. Акции закрылись на $243,79 (−4%), в постмаркете снижались ещё на 6–9% (источники расходятся).</p>
       <div class="estimate">
         <span class="label">Оценка · сигнал для сектора</span>
-        <p>Сильный облачный спрос подтверждает тренд сектора, а реакция на сам Microsoft показывает, что рынок ценит финансирование ИИ из собственных денег. Бухгалтерское продление срока службы активов стоит учитывать при сравнении с конкурентами.</p>
+        <p>Ускорение AWS подтверждает устойчивый спрос на облачную инфраструктуру ИИ, поддерживая поставщиков чипов и серверов. Рынок при этом наказывает за прогноз и расходы, что соответствует тренду последних кварталов, когда капекс на ИИ вызывает вопросы об отдаче.</p>
       </div>
-      <div class="src">Источник: <a href="https://xtb.com/int/market-analysis/news-and-research/microsoft-results-cloud-growth-overshadows-capex-questions" target="_blank" rel="noopener">XTB</a>, <a href="https://www.fool.com/investing/2026/10/28/microsoft-and-alphabet-just-reported-earnings-putting-the-ai-boom-to-the-test/" target="_blank" rel="noopener">Motley Fool</a></div>
+      <div class="src">Источник: <a href="https://www.geekwire.com/2026/aws-growth-hits-39-its-fastest-in-nearly-five-years-as-amazon-misses-on-earnings/" target="_blank" rel="noopener">GeekWire</a>, <a href="https://www.forbes.com/sites/fionariley/2026/10/29/amazon-falls-short-of-overall-revenue-prediction-despite-aws-revenue-growth-nearing-40/" target="_blank" rel="noopener">Forbes</a></div>
     </article>
   </section>
 
@@ -519,15 +597,15 @@
     <h2><span class="n">06</span>По регионам</h2>
     <div class="regions">
       <div class="region">
-        <div class="rname">Азия</div>
+        <div class="rname">Еврозона</div>
         <ul>
-          <li id="asia-close">Nikkei 225 закрылся +1,08% на 63 954 на фоне полупроводников; Kospi +6,63% до 6 012,44 после отчёта SK Hynix, прибыль которого, по данным обзора, выросла почти втрое; Hang Seng +0,23% до 23 094,83. <a href="https://www.cnbc.com/2026/10/27/stock-market-today-live-updates.html" target="_blank" rel="noopener">↗</a></li>
+          <li id="ez-hicp-sep">Инфляция в еврозоне в сентябре выросла до 3,8% с 3,2% в августе, в Германии — до 3,3% с 2,9% (опубликовано 16.10). Следующая оценка за октябрь — 04.11. <a href="https://ec.europa.eu/eurostat/web/products-euro-indicators/w/2-16102026-ap" target="_blank" rel="noopener">↗</a></li>
         </ul>
       </div>
       <div class="region">
-        <div class="rname">Еврозона</div>
+        <div class="rname">США</div>
         <ul>
-          <li id="eu-fx">Евро торговался вблизи 17-месячных минимумов к доллару перед решением ФРС (FXStreet, 28.10). <a href="https://fxstreet.com/news/euro-steadies-near-17-month-lows-ahead-of-fed-rate-verdict-202610281401" target="_blank" rel="noopener">↗</a></li>
+          <li id="us-claims">Первичные обращения за пособием по безработице за неделю — 194 тыс. против консенсуса 199 тыс. <a href="https://invezz.com/news/2026/10/29/pce-inflation-accelerates-to-3-6-as-gdp-growth-beats-estimates-jobless-claims-fall/" target="_blank" rel="noopener">↗</a></li>
         </ul>
       </div>
     </div>
@@ -537,81 +615,76 @@
     <h2><span class="n">07</span>Общая картина</h2>
     <div class="bigpicture">
       <div class="label">Интерпретация, не факты</div>
-      <p>Нефть выше 115 $ и повышение ставки в Канаде показывают, что энергетический шок выходит в ставки: ФРС удержала ставку, но двое членов FOMC голосовали за повышение, а рынок закладывает декабрьское повышение с вероятностью 85%. Доходность 10-летних UST около 5% и дорогие ИИ-капзатраты (наказание Alphabet) ужесточают финансовые условия при слабеющем европейском потребителе. Сегодняшний тон ЕЦБ покажет, готов ли Европейский центробанк идти за ФРС.</p>
+      <p>Сильный рост ВВП США и ускорение сентябрьского PCE до 3,6% при двух голосах в ФРС за повышение и ястребином сигнале ЕЦБ и Банка Японии смещают ожидания к декабрьскому ужесточению сразу в трёх крупных экономиках. Нефть выше $100 поддерживает инфляцию и ограничивает пространство для смягчения. Риск для роста — распродажа ИИ-акций: слабые прогнозы Intel и Amazon могут ослабить инвестиционный цикл в ИИ, который сейчас тянет рост США.</p>
       <div class="shifts">
-        <span class="tag shift is-down">Рост: риски вниз</span>
-        <span class="tag shift is-up">Инфляция: выше</span>
-        <span class="tag shift is-up">Ставки: выше дольше</span>
+        <span class="tag shift is-up">Рост: США сильнее</span>
+        <span class="tag shift is-up">Инфляция: выше дольше</span>
+        <span class="tag shift is-up">Ставки: риск повышения</span>
       </div>
     </div>
   </section>
 
   <section id="outlook">
     <h2><span class="n">08</span>Календарь</h2>
-
     <div class="day">
-      <h3>Сегодня · Чт 29.10</h3>
-      <ul class="events">
-        <li class="is-key">
-          <div class="time">13:30</div>
-          <div>
-            <div class="ev">US · ВВП за III квартал, первая оценка</div>
-            <div class="cons">Консенсус: <span class="num">3,2%</span> · пред.: <span class="num">2,2%</span> (аннуализ.; <a href="https://www.kucoin.com/news/flash/us-q3-gdp-and-september-pce-data-to-be-released-on-october-29" target="_blank" rel="noopener">данные обзора</a>)</div>
-            <div class="why">Показывает, выдерживает ли экономика высокие ставки; сильная цифра усилит ставки на повышение в декабре.</div>
-          </div>
-        </li>
-        <li class="is-key">
-          <div class="time">13:30</div>
-          <div>
-            <div class="ev">US · Личные доходы и расходы, сентябрь (PCE)</div>
-            <div class="cons">Ожидание: базовый PCE +0,3% м/м, +3,1% г/г (консенсусы по общему PCE у источников расходятся; <a href="https://www.kucoin.com/news/flash/us-q3-gdp-and-september-pce-data-to-be-released-on-october-29" target="_blank" rel="noopener">данные обзора</a>)</div>
-            <div class="why">Любимый показатель инфляции ФРС: решает, насколько оправдано декабрьское повышение.</div>
-          </div>
-        </li>
-        <li class="is-normal">
-          <div class="time">13:30</div>
-          <div>
-            <div class="ev">US · Первичные заявки на пособие по безработице</div>
-            <div class="cons">Ожидание: консенсус не найден; в фокусе устойчивость рынка труда</div>
-            <div class="why">Косвенный индикатор роста для оценки жёсткости политики.</div>
-          </div>
-        </li>
-        <li class="is-key">
-          <div class="time">14:15</div>
-          <div>
-            <div class="ev">EU · Решение ЕЦБ по ставкам; пресс-конференция Лагард в 14:45</div>
-            <div class="cons">Ожидание: депозитная ставка 2,50% без изменений (<a href="https://www.tmgm.com/de/analysis/market-news/article/ecb-expected-to-pause-in-october-before-hiking-rates-in-december-reuters-poll-202610081239" target="_blank" rel="noopener">опрос Reuters</a>)</div>
-            <div class="why">Сигнал по декабрьскому повышению и по спредам Франции.</div>
-          </div>
-        </li>
-        <li class="is-normal">
-          <div class="time is-session">после закр.</div>
-          <div>
-            <div class="ev">US · Квартальный отчёт Amazon</div>
-            <div class="cons">Ожидание: в фокусе окупаемость ИИ-капзатрат (по превью <a href="https://aiweekly.co/alerts/bloomberg-alphabet-microsoft-meta-earnings-this-week-will-judge-whether-800b-ai" target="_blank" rel="noopener">Bloomberg</a>)</div>
-            <div class="why">Продолжение темы облаков и ИИ после Microsoft и Alphabet.</div>
-          </div>
-        </li>
-      </ul>
-    </div>
-
-    <div class="day">
-      <h3>Пт 30.10</h3>
+      <h3>Сегодня · Пт 30.10</h3>
       <ul class="events">
         <li class="is-normal">
+          <div class="time is-session">до откр.</div>
+          <div>
+            <div class="ev">DE · ВВП, III кв., предв. (кв/кв)</div>
+            <div class="cons">Консенсус: <span class="num">+0,1%</span> · пред.: <span class="num">+0,3%</span></div>
+            <div class="why">Показывает, выдерживает ли крупнейшая экономика еврозоны энергетический шок.</div>
+          </div>
+        </li>
+        <li class="is-normal">
+          <div class="time is-session">до откр.</div>
+          <div>
+            <div class="ev">EZ · ВВП, III кв., предв. (кв/кв)</div>
+            <div class="cons">Консенсус: <span class="num">+0,2%</span> · пред.: <span class="num">+0,6%</span></div>
+            <div class="why">Данные о росте влияют на аргументы ЕЦБ в пользу декабрьского повышения.</div>
+          </div>
+        </li>
+        <li class="is-key">
           <div class="time">13:30</div>
           <div>
-            <div class="ev">US · Индекс стоимости рабочей силы (ECI)</div>
-            <div class="cons">Ожидание: консенсус не найден; в фокусе давление зарплат на инфляцию</div>
-            <div class="why">Зарплатная инфляция влияет на ожидания по ставке ФРС.</div>
+            <div class="ev">US · Индекс стоимости рабочей силы (ECI), III кв. (кв/кв)</div>
+            <div class="cons">Консенсус: <span class="num">+0,8%</span> · пред.: <span class="num">+0,9%</span></div>
+            <div class="why">Оценка зарплатного давления перед декабрьским решением ФРС.</div>
           </div>
         </li>
         <li class="is-normal">
           <div class="time is-session">в течение дня</div>
           <div>
-            <div class="ev">JP · Решение Банка Японии (дата по данным одного из обзоров)</div>
-            <div class="cons">Ожидание: сохранение 1,00% (<a href="https://cryptoslate.com/predictions/market/bank-of-japan-interest-rate-decision-october-2026/" target="_blank" rel="noopener">рынок прогнозов</a>); часть аналитиков не исключает повышения (<a href="https://stockwirex.com/?p=48587" target="_blank" rel="noopener">StockWireX</a>)</div>
-            <div class="why">Влияет на иену и глобальные доходности.</div>
+            <div class="ev">DE · Инфляция, октябрь (предв.)</div>
+            <div class="cons">Ожидание: после 3,3% в сентябре в фокусе энергетическая составляющая</div>
+            <div class="why">Подсказка перед флэш-оценкой по еврозоне 04.11.</div>
+          </div>
+        </li>
+      </ul>
+    </div>
+    <div class="day">
+      <h3>Вт 03.11</h3>
+      <ul class="events">
+        <li class="is-key">
+          <div class="time is-session">в течение дня</div>
+          <div>
+            <div class="ev">US · Выборы в Конгресс (03.11)</div>
+            <div class="cons">Ожидание: итоги определят расстановку сил в Конгрессе</div>
+            <div class="why">Исход влияет на фискальную политику и налоговые ожидания; по данным СМИ, после выборов возможны решения по Ирану.</div>
+          </div>
+        </li>
+      </ul>
+    </div>
+    <div class="day">
+      <h3>Ср 04.11</h3>
+      <ul class="events">
+        <li class="is-key">
+          <div class="time is-session">в течение дня</div>
+          <div>
+            <div class="ev">EZ · Предварительная оценка инфляции за октябрь (04.11)</div>
+            <div class="cons">Ожидание: после 3,8% в сентябре; главный ориентир для декабрьского решения ЕЦБ</div>
+            <div class="why">Подтвердит или ослабит рыночную ставку на повышение в декабре.</div>
           </div>
         </li>
       </ul>
