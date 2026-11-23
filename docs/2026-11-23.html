@@ -1,0 +1,780 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="color-scheme" content="light dark">
+<title>Дайджест · 23.11</title>
+<style>
+  :root {
+    --bg: #fbfaf7;
+    --text: #1d1d1b;
+    --muted: #6b6963;
+    --faint: #9a978f;
+    --rule: #e6e3dc;
+    --tint: #f2f0ea;
+    --accent: #2f5bd3;
+    --pos: #16794a;
+    --neg: #b42323;
+    --mix: #9a6100;
+    --high: #c62828;
+    --med: #c98a00;
+    --low: #9aa1ab;
+    --estimate: #6b5fd0;
+    --font: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    --mono: ui-monospace, "SF Mono", "JetBrains Mono", Menlo, Consolas, monospace;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg: #1d1f20;
+      --text: #e8e6e1;
+      --muted: #a09e98;
+      --faint: #74726d;
+      --rule: #2b2d30;
+      --tint: #1d1f21;
+      --accent: #8aa6ff;
+      --pos: #4cc58a;
+      --neg: #f07070;
+      --mix: #e3b04b;
+      --high: #f06262;
+      --med: #e3b04b;
+      --low: #6f7680;
+      --estimate: #a89ff2;
+    }
+  }
+
+  * { box-sizing: border-box; }
+  html { scroll-behavior: smooth; scroll-padding-top: 56px; }
+  body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--text);
+    font: 16px/1.6 var(--font);
+    -webkit-text-size-adjust: 100%;
+  }
+  a { color: var(--accent); text-decoration: none; }
+  a:hover { text-decoration: underline; }
+  .wrap { max-width: 760px; margin: 0 auto; padding: 0 20px; }
+  .num { font-family: var(--mono); font-variant-numeric: tabular-nums; }
+
+  /* Masthead */
+  .masthead { padding-top: 40px; padding-bottom: 8px; }
+  .masthead .kicker { font-size: 12.5px; letter-spacing: .08em; text-transform: uppercase; color: var(--muted); }
+  .masthead h1 { margin: 4px 0 6px; font-size: 32px; line-height: 1.2; letter-spacing: -.01em; }
+  .masthead .meta { display: flex; flex-wrap: wrap; column-gap: 16px; row-gap: 2px; color: var(--muted); font-size: 14px; }
+  .lede { margin: 18px 0 0; font-size: 19px; line-height: 1.5; }
+
+  /* Section nav */
+  nav.toc {
+    position: sticky; top: 0; z-index: 5;
+    background: color-mix(in srgb, var(--bg) 92%, transparent);
+    backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px);
+  }
+  nav.toc .wrap { display: flex; gap: 18px; overflow-x: auto; padding-top: 12px; padding-bottom: 12px; scrollbar-width: none; }
+  nav.toc .wrap::-webkit-scrollbar { display: none; }
+  nav.toc a { flex: none; font-size: 13.5px; color: var(--muted); }
+  nav.toc a:hover { color: var(--text); text-decoration: none; }
+
+  /* Sections */
+  section { padding: 36px 0 4px; }
+  section > h2 {
+    display: flex; align-items: baseline; gap: 10px;
+    margin: 0 0 6px -46px; font-size: 28px; font-weight: 400; color: var(--muted);
+  }
+  section > h2 .n { color: var(--rule); font-family: var(--mono); font-weight: 400; }
+  h3.subhead { margin: 22px 0 0; font-size: 18px; text-transform: uppercase; font-weight: 400; color: var(--muted); }
+  .empty { color: var(--muted); font-style: italic; margin: 8px 0 0; }
+  .note { font-size: 13px; color: var(--muted); margin: 10px 0 0; }
+
+  /* Story items: separated by whitespace and a hairline, no boxes */
+  .card { padding: 18px 0; border-bottom: 1px solid var(--rule); }
+  .card:last-child { border-bottom: none; }
+  .card h4 { margin: 0 0 6px; font-size: 18px; line-height: 1.35; }
+  .card h4 a { color: var(--text); }
+  .card h4 a:hover { color: var(--accent); }
+  .card p { margin: 8px 0 0; }
+  .card .src { margin-top: 8px; font-size: 13px; color: var(--muted); }
+  .card .src a { word-break: break-word; }
+
+  /* Chips are plain inline labels; colour carries the value */
+  .tags { display: flex; flex-wrap: wrap; gap: 2px 14px; font-size: 13px; line-height: 18px; color: var(--muted); margin-bottom: 18px; }
+  .tag { color: var(--muted); }
+  .tag.is-high, .tag.is-medium, .tag.is-low, .tag.is-confirmed, .tag.is-reported, .tag.is-rumor { white-space: nowrap; }
+  .tag b { font-weight: 500; color: var(--text); }
+  .tag.is-high, .tag.is-medium, .tag.is-low { font-weight: 600; color: var(--text); }
+  .tag.is-high::before, .tag.is-medium::before, .tag.is-low::before {
+    content: ""; display: inline-block; width: 8px; height: 8px; border-radius: 50%; margin-right: 6px; vertical-align: 1px;
+  }
+  .tag.is-high::before { background: var(--high); }
+  .tag.is-medium::before { background: var(--med); }
+  .tag.is-low::before { background: var(--low); }
+  .tag.is-positive { color: var(--pos); }
+  .tag.is-negative { color: var(--neg); }
+  .tag.is-mixed { color: var(--mix); }
+  .tag.is-reported { color: var(--mix); font-style: italic; }
+  .tag.is-rumor { color: var(--neg); font-style: italic; }
+  .tag.is-against-trend { color: var(--mix); }
+  .tag.shift.is-up::before { content: "▲ "; font-size: 10px; }
+  .tag.shift.is-down::before { content: "▼ "; font-size: 10px; }
+  .tag.shift.is-flat::before { content: "● "; font-size: 8px; vertical-align: 1px; }
+
+  .estimate { margin: 16px 0; }
+  .estimate .label {
+    display: block; font-size: 11px; letter-spacing: .07em; text-transform: uppercase;
+    color: var(--estimate); font-weight: 700;
+  }
+  .estimate p { margin: 2px 0 0; }
+
+  /* Top stories: linked contents list */
+  ul.top { list-style: none; margin: 0; padding: 0; }
+  ul.top > li {
+    display: flex; align-items: baseline; gap: 12px;
+    padding: 10px 0; border-bottom: 1px solid var(--rule);
+  }
+  ul.top > li:last-child { border-bottom: none; }
+  ul.top > li::before {
+    content: ""; flex: none; width: 8px; height: 8px; border-radius: 50%; background: var(--low);
+    transform: translateY(-2px);
+  }
+  ul.top > li.is-high::before { background: var(--high); }
+  ul.top > li.is-medium::before { background: var(--med); }
+  ul.top .headline { flex: 1; font-weight: 600; font-size: 16.5px; line-height: 1.4; }
+  ul.top .headline a { color: var(--text); }
+  ul.top .headline a:hover { color: var(--accent); }
+  ul.top .where { display: block; font-size: 13px; font-weight: 400; color: var(--muted); }
+  ul.top .tag { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+
+  /* Jump target from the contents list */
+  .card:target, tr:target > td, li:target { animation: target-flash 2.4s ease-out; }
+  @keyframes target-flash {
+    from { background: color-mix(in srgb, var(--accent) 16%, var(--bg)); }
+  }
+
+  /* Today's focus */
+  .card.is-preview { margin-top: 14px; padding: 18px 20px; background: var(--tint); border-bottom: none; border-radius: 6px; }
+  .card .kicker {
+    display: block; font-size: 11px; letter-spacing: .07em; text-transform: uppercase;
+    color: var(--accent); font-weight: 700; margin-bottom: 4px;
+  }
+  .card dl { display: grid; grid-template-columns: 120px 1fr; gap: 4px 14px; margin: 10px 0 0; }
+  .card dt { color: var(--muted); font-size: 14px; }
+  .card dd { margin: 0; }
+
+  /* Markets strip */
+  .markets {
+    display: grid; grid-template-columns: repeat(auto-fill, minmax(130px, 1fr)); gap: 18px 20px; margin-top: 14px;
+  }
+  .tile .name { font-size: 12.5px; color: var(--muted); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .tile .value { font: 600 20px/1.3 var(--mono); font-variant-numeric: tabular-nums; }
+  .tile .chg { font: 500 13px/1.4 var(--mono); font-variant-numeric: tabular-nums; }
+  .tile .asof { font-size: 11.5px; color: var(--faint); }
+  .tile.is-up .chg { color: var(--pos); }
+  .tile.is-up .chg::before { content: "▲ "; font-size: 10px; }
+  .tile.is-down .chg { color: var(--neg); }
+  .tile.is-down .chg::before { content: "▼ "; font-size: 10px; }
+  .tile.is-flat .chg { color: var(--muted); }
+  .tile.is-flat .chg::before { content: "● "; font-size: 8px; vertical-align: 2px; }
+
+  /* Data table */
+  .table-scroll { overflow-x: auto; margin-top: 8px; }
+  table.data { width: 100%; border-collapse: collapse; font-size: 14.5px; min-width: 600px; }
+  table.data th, table.data td { padding: 10px 10px 10px 0; text-align: left; border-bottom: 1px solid var(--rule); vertical-align: top; }
+  table.data tr:last-child td { border-bottom: none; }
+  table.data th { font-size: 11.5px; font-weight: 600; color: var(--muted); text-transform: uppercase; letter-spacing: .05em; }
+  table.data td.r, table.data th.r { text-align: right; padding-right: 16px; }
+  table.data td.num { white-space: nowrap; }
+  table.data .actual { font-weight: 700; }
+  table.data .what { font-weight: 600; }
+  table.data .what small { display: block; font-weight: 400; color: var(--muted); }
+  table.data td small.rev { display: block; font-size: 11.5px; color: var(--muted); font-family: var(--font); }
+  table.data td .tag { font-size: 13px; }
+  .flag { font-size: 13px; font-weight: 600; white-space: nowrap; }
+  .flag.is-inline { color: var(--muted); font-weight: 500; }
+
+  /* Regional roundup */
+  .region { display: grid; grid-template-columns: 120px 1fr; gap: 14px; padding: 14px 0; border-bottom: 1px solid var(--rule); }
+  .region:last-child { border-bottom: none; }
+  .region .rname { font-weight: 600; }
+  .region ul { margin: 0; padding-left: 18px; }
+  .region li + li { margin-top: 4px; }
+
+  /* Big picture */
+  .bigpicture { margin-top: 12px; padding-left: 16px; border-left: 2px solid var(--estimate); }
+  .bigpicture .label { font-size: 11px; letter-spacing: .07em; text-transform: uppercase; color: var(--estimate); font-weight: 700; }
+  .bigpicture p { margin: 4px 0 0; font-size: 17.5px; line-height: 1.55; }
+  .shifts { display: flex; flex-wrap: wrap; gap: 4px 18px; margin-top: 10px; font-size: 13.5px; }
+  .shifts .tag { color: var(--text); }
+
+  /* Outlook */
+  .day h3 { margin: 22px 0 2px; font-size: 13px; color: var(--muted); font-weight: 700; text-transform: uppercase; letter-spacing: .06em; }
+  ul.events { list-style: none; margin: 0; padding: 0; }
+  ul.events li { display: grid; grid-template-columns: 76px 1fr; gap: 12px; padding: 10px 0; border-bottom: 1px solid var(--rule); }
+  ul.events li:last-child { border-bottom: none; }
+  ul.events .time { font: 600 14px/1.55 var(--mono); color: var(--muted); }
+  ul.events .time.is-session { font: 600 12.5px/1.4 var(--font); padding-top: 2px; }
+  ul.events .ev { font-weight: 600; }
+  ul.events .cons { font-size: 13.5px; color: var(--muted); }
+  ul.events .why { font-size: 14.5px; margin-top: 2px; }
+  ul.events li.is-key .time { color: var(--high); }
+  ul.events li.is-key .ev::after {
+    content: "Ключевое"; margin-left: 8px; font-size: 10.5px; font-weight: 700; letter-spacing: .06em;
+    text-transform: uppercase; color: var(--high); vertical-align: 1px;
+  }
+
+  /* Checker problems left after three fix attempts */
+  .check-errors { margin: 40px 0; padding: 16px 18px; background: var(--tint); border-left: 3px solid var(--neg); border-radius: 6px; }
+  .check-errors h2 { margin: 0; font-size: 13px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; color: var(--neg); }
+  .check-errors p { margin: 6px 0 0; font-size: 14px; color: var(--muted); }
+  .check-errors ul { margin: 8px 0 0; padding-left: 18px; font: 12.5px/1.5 var(--mono); color: var(--muted); }
+  .check-errors li { overflow-wrap: anywhere; }
+
+  footer { margin-top: 40px; margin-bottom: 48px; padding-top: 14px; border-top: 1px solid var(--rule); font-size: 13px; color: var(--muted); }
+  footer p { margin: 4px 0; }
+
+  /* Hanging section numbers need room left of the column; pull them in on narrower screens */
+  @media (max-width: 860px) {
+    section > h2 { margin-left: 0; }
+  }
+  @media (max-width: 600px) {
+    body { font-size: 15.5px; }
+    .wrap { padding: 0 16px; }
+    .masthead { padding-top: 28px; }
+    .masthead h1 { font-size: 26px; }
+    .lede { font-size: 17.5px; }
+    .region { grid-template-columns: 1fr; gap: 4px; }
+    .card dl { grid-template-columns: 1fr; gap: 0; }
+    .card dd { margin-bottom: 6px; }
+    .markets { grid-template-columns: repeat(2, 1fr); }
+    ul.events li { grid-template-columns: 64px 1fr; }
+  }
+  @media print {
+    nav.toc { display: none; }
+    body { background: #fff; }
+    .card, ul.top > li, .tile, .region, ul.events li { break-inside: avoid; }
+  }
+</style>
+</head>
+
+<body>
+
+<header class="masthead wrap">
+  <div class="kicker">Макро и рынки · утренний дайджест</div>
+  <h1>Понедельник, 23 ноября 2026</h1>
+  <div class="meta">
+    <span>Период: 20.11, 06:30 — 23.11, 06:20</span>
+    <span>Подготовлено 23.11, 06:20 по Берлину</span>
+  </div>
+  <p class="lede">Пятничный обвал ИИ-сектора (S&amp;P 500 −3,7% и в коррекции, Nasdaq −5,3%, Nvidia −14% на сообщении Reuters о проверке SEC) в понедельник перекинулся на Азию: KOSPI падает, несмотря на стабфонд Сеула, а фьючерсы США отскакивают на 2–3%. Главный вопрос недели — инфляция PCE в среду и готовность ФРС повышать ставку в декабре на фоне резко ужесточившихся финансовых условий.</p>
+</header>
+
+<nav class="toc" aria-label="Разделы">
+  <div class="wrap">
+    <a href="#top-stories">Главное</a>
+    <a href="#markets">Рынки</a>
+    <a href="#data">Данные</a>
+    <a href="#policy">Макро и политика</a>
+    <a href="#companies">Компании</a>
+    <a href="#regions">Регионы</a>
+    <a href="#big-picture">Общая картина</a>
+    <a href="#outlook">Календарь</a>
+  </div>
+</nav>
+
+<main class="wrap">
+
+  <section id="top-stories">
+    <h2><span class="n">01</span>Главное</h2>
+    <ul class="top">
+      <li class="is-high">
+        <div class="headline"><a href="#us-ai-rout">S&amp;P 500 в коррекции, Nasdaq ушёл в минус за год: худшая неделя с апреля 2025</a><span class="where">Рыночный стресс</span></div>
+        <span class="tag is-high">высокое</span>
+      </li>
+      <li class="is-high">
+        <div class="headline"><a href="#nvidia-sec">Nvidia −14%: Reuters сообщает о проверке SEC по бухгалтерии компании</a><span class="where">Полупроводники</span></div>
+        <span class="tag is-high">высокое</span>
+      </li>
+      <li class="is-high">
+        <div class="headline"><a href="#fed-bessent">Бессент предупредил ФРС о риске переужесточения перед декабрьским заседанием</a><span class="where">Центробанки</span></div>
+        <span class="tag is-high">высокое</span>
+      </li>
+      <li class="is-medium">
+        <div class="headline"><a href="#kr-stabilization-fund">Южная Корея готовит первый за 18 лет стабфонд, KOSPI на 10-месячном минимуме</a><span class="where">Рыночный стресс</span></div>
+        <span class="tag is-medium">среднее</span>
+      </li>
+      <li class="is-medium">
+        <div class="headline"><a href="#us-futures-bounce">Фьючерсы на S&amp;P 500 и Nasdaq 100 в понедельник отскакивают на 2–3%</a><span class="where">Регионы · США</span></div>
+        <span class="tag is-medium">среднее</span>
+      </li>
+      <li class="is-medium">
+        <div class="headline"><a href="#oil-gulf">Нефть: Brent −4% за неделю, атаки в Заливе сдерживают падение; ОПЕК+ 29.11</a><span class="where">Энергетика и сырьё</span></div>
+        <span class="tag is-medium">среднее</span>
+      </li>
+      <li class="is-medium">
+        <div class="headline"><a href="#gb-retail">Розничные продажи Великобритании +0,7% м/м против ожидавшихся 0,0%</a><span class="where">Данные · Великобритания</span></div>
+        <span class="tag is-medium">среднее</span>
+      </li>
+      <li class="is-medium">
+        <div class="headline"><a href="#anthropic-ipo">Anthropic: IPO на 81 млрд $ и +17% в первый день — на фоне распродажи в секторе</a><span class="where">ИИ и программное обеспечение</span></div>
+        <span class="tag is-medium">среднее</span>
+      </li>
+    </ul>
+  </section>
+
+  <section id="markets">
+    <h2><span class="n">02</span>Рынки</h2>
+    <div class="markets">
+      <div class="tile is-down">
+        <div class="name">US 10y</div>
+        <div class="value">4,92%</div>
+        <div class="chg">−12 б.п.</div>
+        <div class="asof">закр. 20.11</div>
+      </div>
+      <div class="tile is-down">
+        <div class="name">Bund 10y</div>
+        <div class="value">3,30%</div>
+        <div class="chg">−11 б.п.</div>
+        <div class="asof">закр. 20.11</div>
+      </div>
+      <div class="tile is-down">
+        <div class="name">Brent</div>
+        <div class="value">92,29 $</div>
+        <div class="chg">−0,30%</div>
+        <div class="asof">23.11, азиатская сессия</div>
+      </div>
+      <div class="tile is-down">
+        <div class="name">Золото</div>
+        <div class="value">3 535 $</div>
+        <div class="chg">−2,51%</div>
+        <div class="asof">закр. 20.11</div>
+      </div>
+      <div class="tile is-down">
+        <div class="name">S&amp;P 500</div>
+        <div class="value">6 910,39</div>
+        <div class="chg">−3,70%</div>
+        <div class="asof">закр. 20.11</div>
+      </div>
+      <div class="tile is-down">
+        <div class="name">Nasdaq Composite</div>
+        <div class="value">22 617,73</div>
+        <div class="chg">−5,28%</div>
+        <div class="asof">закр. 20.11</div>
+      </div>
+      <div class="tile is-down">
+        <div class="name">Dow Jones</div>
+        <div class="value">—</div>
+        <div class="chg">−1,9%</div>
+        <div class="asof">закр. 20.11</div>
+      </div>
+      <div class="tile is-up">
+        <div class="name">Фьючерс S&amp;P 500</div>
+        <div class="value">7 073</div>
+        <div class="chg">+1,99%</div>
+        <div class="asof">22.11, вечер (время США)</div>
+      </div>
+      <div class="tile is-up">
+        <div class="name">Фьючерс Nasdaq 100</div>
+        <div class="value">25 830</div>
+        <div class="chg">+2,80%</div>
+        <div class="asof">22.11, вечер (время США)</div>
+      </div>
+      <div class="tile is-down">
+        <div class="name">STOXX 600</div>
+        <div class="value">625,65</div>
+        <div class="chg">−2,0%</div>
+        <div class="asof">закр. 20.11</div>
+      </div>
+      <div class="tile is-down">
+        <div class="name">DAX</div>
+        <div class="value">24 802,78</div>
+        <div class="chg">−2,6%</div>
+        <div class="asof">закр. 20.11</div>
+      </div>
+      <div class="tile is-down">
+        <div class="name">KOSPI</div>
+        <div class="value">4 734,90</div>
+        <div class="chg">−2,8%</div>
+        <div class="asof">23.11, открытие</div>
+      </div>
+      <div class="tile is-down">
+        <div class="name">Hang Seng</div>
+        <div class="value">22 267</div>
+        <div class="chg">−0,64%</div>
+        <div class="asof">23.11, полдень (Гонконг)</div>
+      </div>
+      <div class="tile is-down">
+        <div class="name">Shanghai Composite</div>
+        <div class="value">3 499,91</div>
+        <div class="chg">−0,96%</div>
+        <div class="asof">23.11, полдень (Шанхай)</div>
+      </div>
+    </div>
+    <p class="note">Источники: <a href="https://spectrumlocalnews.com/nc/coastal/business/2026/11/20/wall-street-nov-20-2026" target="_blank" rel="noopener">AP</a> (индексы США, US 10y), <a href="https://tradingeconomics.com/germany/government-bond-yield" target="_blank" rel="noopener">Trading Economics</a> (Bund), <a href="https://tradingeconomics.com/commodity/gold" target="_blank" rel="noopener">Trading Economics</a> (золото), <a href="https://whbl.com/2026/11/22/oil-prices-fall-amid-equity-selloff-though-iran-war-attacks-limit-losses/" target="_blank" rel="noopener">Reuters</a> (Brent), <a href="https://www.cnbc.com/2026/11/22/stock-market-today-live-updates.html" target="_blank" rel="noopener">CNBC</a> (фьючерсы), <a href="https://mlq.ai/news/european-stocks-close-down-2-to-cap-their-worst-week-since-march-as-asml-and-infineon-slump/" target="_blank" rel="noopener">MLQ</a> (STOXX 600, DAX), <a href="https://en.sedaily.com/market/2026/11/23/kospi-opens-down-28-percent-as-emergency-measures-blunt" target="_blank" rel="noopener">Seoul Economic Daily</a> (KOSPI), <a href="https://www.thestandard.com.hk/finance/article/349320/Hong-Kong-stocks-drop-by-midday-break" target="_blank" rel="noopener">The Standard</a> (Hang Seng), <a href="https://news.futunn.com/en/post/1005307273/a-share-midday-review-shanghai-composite-index-down-0-96" target="_blank" rel="noopener">Futu</a> (Шанхай). Биржи Японии 23.11 закрыты (праздник).</p>
+  </section>
+
+  <section id="data">
+    <h2><span class="n">03</span>Вышедшие данные</h2>
+    <div class="table-scroll">
+      <table class="data">
+        <thead>
+          <tr>
+            <th>Показатель</th>
+            <th class="r">Факт</th>
+            <th class="r">Консенсус</th>
+            <th class="r">Пред.</th>
+            <th>Сюрприз</th>
+            <th>Влияние</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr id="gb-retail">
+            <td class="what"><a href="https://www.rte.ie/news/business/2026/1120/1599950-uk-retail-sales/" target="_blank" rel="noopener">GB · Розничные продажи, м/м</a><small>октябрь · 20.11, 08:00</small></td>
+            <td class="r num actual">+0,7%</td>
+            <td class="r num">0,0%</td>
+            <td class="r num">−0,6%<small class="rev">пересм. с −0,4%</small></td>
+            <td><span class="flag is-above">▲ Выше</span></td>
+            <td><span class="tag is-medium">среднее</span></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <p class="note">Консенсус — медиана опроса Reuters. В годовом выражении продажи выросли на 2,3% при консенсусе 1,7%. По данным BRC-KPMG, в октябре часть покупателей откладывала покупки до распродаж «чёрной пятницы». <a href="https://www.thestar.com.my/news/world/2026/11/11/britain039s-retail-sales-modest-in-october-brc" target="_blank" rel="noopener">↗</a></p>
+  </section>
+
+  <section id="policy">
+    <h2><span class="n">04</span>Макро и политика</h2>
+
+    <h3 class="subhead">Рыночный стресс</h3>
+    <article class="card is-high" id="us-ai-rout">
+      <h4><a href="https://spectrumlocalnews.com/nc/coastal/business/2026/11/20/wall-street-nov-20-2026" target="_blank" rel="noopener">Распродажа в ИИ-секторе: S&amp;P 500 в коррекции, капитал уходит в госдолг и доллар</a></h4>
+      <div class="tags">
+        <span class="tag is-high">Влияние: высокое</span>
+        <span class="tag is-mixed">Смешанно: + госдолг США, доллар; − техсектор, рисковые активы</span>
+        <span class="tag">Масштаб: <b>Глобально</b></span>
+        <span class="tag">Сюрприз: <b>да, масштаб падения</b></span>
+        <span class="tag is-confirmed">Подтверждено</span>
+      </div>
+      <p class="facts">В пятницу 20.11 S&amp;P 500 упал на 3,70% до 6 910,39 — седьмое снижение подряд, −8,6% за неделю, худшая неделя с апреля 2025; индекс в зоне коррекции. Nasdaq Composite −5,28% до 22 617,73 и в минусе с начала года, Dow −1,9%; вырос только сектор потребительских товаров первой необходимости. Доходность 10-летних UST снизилась примерно с 5,04% до 4,92%, 2-летних — до ~4,63%. Индекс доллара держится около 103,9 — максимум за 19 месяцев, четвёртый недельный рост (CNBC). Золото −2,5% до 3 535 $ — минимум за 12 месяцев (Trading Economics). STOXX 600 −2,0%, −5,8% за неделю; DAX −2,6%, −7,3% за неделю.</p>
+      <div class="estimate">
+        <span class="label">Оценка · последствия</span>
+        <p>Падение акций при снижении доходностей означает бегство в качество: рынок начинает закладывать удар по росту и меньшую агрессивность ФРС. Финансовые условия резко ужесточились через акции и сильный доллар — это работает как дополнительное повышение ставки и давит на EM и экспортёров. Распродажа золота вместе с акциями указывает на принудительное сокращение позиций (маржин-коллы), а не только на смену взглядов.</p>
+      </div>
+      <div class="src">Источник: <a href="https://spectrumlocalnews.com/nc/coastal/business/2026/11/20/wall-street-nov-20-2026" target="_blank" rel="noopener">AP</a>, <a href="https://www.cnbc.com/2026/11/20/dollar-price-currency-euro-yen.html" target="_blank" rel="noopener">CNBC</a>, <a href="https://mlq.ai/news/european-stocks-close-down-2-to-cap-their-worst-week-since-march-as-asml-and-infineon-slump/" target="_blank" rel="noopener">MLQ</a></div>
+    </article>
+
+    <article class="card is-medium" id="kr-stabilization-fund">
+      <h4><a href="https://en.sedaily.com/economy/2026/11/23/kospi-hits-10-month-low-as-korea-readies-first-stock-fund" target="_blank" rel="noopener">Южная Корея готовит стабфонд рынка акций и смягчает лимиты на обратный выкуп</a></h4>
+      <div class="tags">
+        <span class="tag is-medium">Влияние: среднее</span>
+        <span class="tag is-mixed">Смешанно: + корейские акции (поддержка); − вона, экспортёры полупроводников</span>
+        <span class="tag">Масштаб: <b>Страна</b></span>
+        <span class="tag">Сюрприз: <b>частично, первый фонд за 18 лет</b></span>
+        <span class="tag is-confirmed">Подтверждено</span>
+      </div>
+      <p class="facts">KOSPI в пятницу 20.11 упал на 5,2% — до 10-месячного минимума. В воскресенье 22.11 правительство объявило экстренные меры: подготовку фонда стабилизации рынка (около 10 трлн вон, ~6,8 млрд $, по данным Seoul Economic Daily) и временное, на три месяца, смягчение дневных лимитов на обратный выкуп акций. В понедельник KOSPI открылся снижением на 2,8% (4 734,90). Банк Кореи проводит заседание в четверг; аналитики Citi и Morgan Stanley ожидали повышения ставки на 25 б.п. до 3,25%.</p>
+      <div class="estimate">
+        <span class="label">Оценка · последствия</span>
+        <p>Корея — самый чувствительный к циклу памяти и ИИ-капексу рынок, поэтому она первой показывает передачу шока из США в Азию. Наличие стабфонда сглаживает падение, но не меняет фундаментальную картину по спросу на чипы. Банку Кореи стало сложнее повышать ставку в четверг: ужесточение на падающем рынке усилит стресс, а пауза поддержит давление на вону.</p>
+      </div>
+      <div class="src">Источник: <a href="https://en.sedaily.com/economy/2026/11/23/kospi-hits-10-month-low-as-korea-readies-first-stock-fund" target="_blank" rel="noopener">Seoul Economic Daily</a>, <a href="https://www.koreajoongangdaily.com/business/govt-prepares-market-stabilization-fund-due-to-sharp-downturns-in-domestic-global-stocks/12985539" target="_blank" rel="noopener">Korea JoongAng Daily</a>, <a href="https://www.koreatimes.co.kr/economy/20261019/bok-poised-to-hold-rates-as-november-hike-remains-in-view" target="_blank" rel="noopener">Korea Times</a></div>
+    </article>
+
+    <h3 class="subhead">Центробанки</h3>
+    <article class="card is-high" id="fed-bessent">
+      <h4><a href="https://www.bloomberg.com/news/articles/2026-11-22/bessent-warns-fed-risks-overtightening-as-us-markets-swoon" target="_blank" rel="noopener">Бессент: ФРС рискует переужесточить политику</a></h4>
+      <div class="tags">
+        <span class="tag is-high">Влияние: высокое</span>
+        <span class="tag is-mixed">Смешанно: + облигации США; − доверие к независимости ФРС, доллар</span>
+        <span class="tag">Масштаб: <b>Глобально</b></span>
+        <span class="tag">Сюрприз: <b>частично, давление Минфина усилилось</b></span>
+        <span class="tag is-confirmed">Подтверждено</span>
+      </div>
+      <p class="facts">Министр финансов США Скотт Бессент в эфире CBS Face the Nation 22.11 предупредил, что ФРС может ужесточить политику сверх необходимого, указав на серию «ястребиных» заявлений управляющих и резкое ужесточение финансовых условий (Bloomberg). Контекст: 28.10 ФРС сохранила ставку 3,75–4,00% при голосовании Кук и Хаммак за повышение (Axios); протокол октябрьского заседания (18.11) показал, что почти все участники ожидают дальнейших повышений; управляющий Уоллер 18.11 допустил повышение на 50 б.п. в декабре (CNBC). По FedWatch на прошлой неделе вероятность повышения 9 декабря оценивалась примерно в 90–95%; после пятничной распродажи трейдеры сократили ставки на повышение (Bloomberg).</p>
+      <div class="estimate">
+        <span class="label">Оценка · последствия</span>
+        <p>Публичное давление Минфина и падение рынков повышают шансы на шаг в 25 б.п. вместо 50 б.п. и на более мягкий сигнал о дальнейших шагах. Но решающим остаётся PCE в среду: горячий базовый показатель вернёт дискуссию о 50 б.п. независимо от позиции Бессента. Для доллара риск двусторонний: меньше повышений — слабее доллар, но спрос на «убежище» пока его поддерживает.</p>
+      </div>
+      <div class="src">Источник: <a href="https://www.bloomberg.com/news/articles/2026-11-22/bessent-warns-fed-risks-overtightening-as-us-markets-swoon" target="_blank" rel="noopener">Bloomberg</a>, <a href="https://www.cnbc.com/2026/11/18/fed-minutes-october-2026.html" target="_blank" rel="noopener">CNBC (протокол ФРС)</a>, <a href="https://www.cnbc.com/2026/11/18/federal-reserve-governor-christopher-waller.html" target="_blank" rel="noopener">CNBC (Уоллер)</a>, <a href="https://www.axios.com/2026/10/28/fed-warsh-interest-rates-cook" target="_blank" rel="noopener">Axios</a></div>
+    </article>
+
+    <article class="card is-low" id="ecb-lagarde">
+      <h4><a href="https://www.ecb.europa.eu/press/key/date/2026/html/ecb.sp261120~e52bcc4db2.en.html" target="_blank" rel="noopener">Лагард: последняя речь на Frankfurt European Banking Congress — без сигналов по ставкам</a></h4>
+      <div class="tags">
+        <span class="tag is-low">Влияние: низкое</span>
+        <span class="tag is-mixed">Смешанно: + производители чипов и ЦОД в ЕС; − без эффекта для ставок</span>
+        <span class="tag">Масштаб: <b>Страна</b></span>
+        <span class="tag">Сюрприз: <b>нет</b></span>
+        <span class="tag is-confirmed">Подтверждено</span>
+      </div>
+      <p class="facts">В речи «Acting in time» 20.11 президент ЕЦБ призвала заранее реагировать на медленно нарастающие угрозы экономической безопасности, включая предложение, чтобы публичные средства ЕС брали на себя первые убытки в крупных проектах заводов микросхем и дата-центров, и предупредила о зависимости от зарубежных вычислительных мощностей. Высказываний о ставках и инфляции в тексте нет. 26–27.11 лидеры еврозоны обсудят в Брюсселе преемника Лагард (Caixin).</p>
+      <div class="estimate">
+        <span class="label">Оценка · последствия</span>
+        <p>Для декабрьского решения ЕЦБ речь нейтральна. Важнее вопрос преемника: кандидатура с более «ястребиной» репутацией закрепит ожидания повышения ставок в 2027 году и поддержит евро.</p>
+      </div>
+      <div class="src">Источник: <a href="https://www.ecb.europa.eu/press/key/date/2026/html/ecb.sp261120~e52bcc4db2.en.html" target="_blank" rel="noopener">ECB</a>, <a href="https://www.caixinglobal.com/2026-11-21/the-week-ahead-nov-23-29-ecb-succession-and-opec-oil-talks-102507365.html" target="_blank" rel="noopener">Caixin</a></div>
+    </article>
+
+    <h3 class="subhead">Энергетика и сырьё</h3>
+    <article class="card is-medium" id="oil-gulf">
+      <h4><a href="https://whbl.com/2026/11/22/oil-prices-fall-amid-equity-selloff-though-iran-war-attacks-limit-losses/" target="_blank" rel="noopener">Нефть дешевеет вслед за акциями, атаки на суда в Заливе ограничивают падение</a></h4>
+      <div class="tags">
+        <span class="tag is-medium">Влияние: среднее</span>
+        <span class="tag is-mixed">Смешанно: + импортёры нефти; − нефтедобытчики</span>
+        <span class="tag">Масштаб: <b>Глобально</b></span>
+        <span class="tag">Сюрприз: <b>нет</b></span>
+        <span class="tag is-confirmed">Подтверждено</span>
+      </div>
+      <p class="facts">За прошлую неделю Brent подешевела на 4%, WTI — на 5%; в понедельник утром Brent −0,30% до 92,29 $ (Reuters). Продолжающиеся атаки на судоходство в Персидском заливе на фоне войны с Ираном сдерживают снижение; аналитик Мукеш Сахдев отмечает рост числа порожних танкеров при отставании гружёных. Министры ОПЕК+ проведут серию встреч 29.11 по квотам на 2027 год.</p>
+      <div class="estimate">
+        <span class="label">Оценка · последствия</span>
+        <p>Снижение нефти облегчает инфляционную картину и поддерживает аргумент Бессента о том, что ценовое давление идёт от энергии, а не от спроса. При этом геополитическая премия сохраняется: любой сбой поставок через Ормузский пролив быстро развернёт цены. Решение ОПЕК+ 29.11 задаст тон на декабрь.</p>
+      </div>
+      <div class="src">Источник: <a href="https://whbl.com/2026/11/22/oil-prices-fall-amid-equity-selloff-though-iran-war-attacks-limit-losses/" target="_blank" rel="noopener">Reuters</a>, <a href="https://www.caixinglobal.com/2026-11-21/the-week-ahead-nov-23-29-ecb-succession-and-opec-oil-talks-102507365.html" target="_blank" rel="noopener">Caixin</a></div>
+    </article>
+  </section>
+
+  <section id="companies">
+    <h2><span class="n">05</span>Компании по секторам</h2>
+
+    <h3 class="subhead">Полупроводники</h3>
+    <article class="card is-high" id="nvidia-sec">
+      <h4><a href="https://www.investing.com/news/economy-news/exclusiveus-secs-nvidia-probe-is-examining-potential-accounting-issues-sources-say-5042460" target="_blank" rel="noopener">Nvidia: SEC изучает бухгалтерию компании, акции −14%</a></h4>
+      <div class="tags">
+        <span class="tag is-high">Влияние: высокое</span>
+        <span class="tag is-negative">Негатив: Nvidia, производители чипов и памяти, ИИ-инфраструктура</span>
+        <span class="tag">Масштаб: <b>Сектор</b></span>
+        <span class="tag">Сюрприз: <b>да</b></span>
+        <span class="tag is-in-trend">В русле тренда сектора</span>
+        <span class="tag is-reported">По данным СМИ</span>
+      </div>
+      <p class="facts">Reuters 20.11 со ссылкой на два источника сообщил, что сотрудники SEC в рамках расследования изучают возможные проблемы в бухгалтерской отчётности Nvidia; какие именно, не установлено. SEC от комментариев отказалась, Nvidia оперативно не ответила. Акции Nvidia закрылись −14,01% на 125,53 $ при объёме ~608 млн бумаг; за неделю около −23%. Падали и другие: Micron −13,9%, AMD −13,3%, Broadcom −12,2%, ADR TSMC −9,4% (Motley Fool).</p>
+      <div class="estimate">
+        <span class="label">Оценка · сигнал для сектора</span>
+        <p>Риск отчётности у главного бенефициара ИИ-капекса бьёт по всей цепочке: поставщикам памяти, контрактным производителям, серверным сборщикам (Dell, HPE отчитываются на этой неделе). Это продолжение распродажи, начавшейся после промежуточных выборов, но с новым фактором — сомнением в качестве выручки, а не только в оценках. Само расследование не означает нарушений; до ясности по его предмету премия за риск в секторе останется высокой.</p>
+      </div>
+      <div class="src">Источник: <a href="https://www.investing.com/news/economy-news/exclusiveus-secs-nvidia-probe-is-examining-potential-accounting-issues-sources-say-5042460" target="_blank" rel="noopener">Reuters</a>, <a href="https://www.fool.com/coverage/stock-market-today/2026/11/20/stock-market-today-nov-20-nvidia-s-usd2-5-trillion-rout-deepens-as-sec-accounting-probe-adds-to-wall-street-s-ai-sell-off/" target="_blank" rel="noopener">Motley Fool</a></div>
+    </article>
+
+    <h3 class="subhead">ИИ и программное обеспечение</h3>
+    <article class="card is-medium" id="anthropic-ipo">
+      <h4><a href="https://www.cbsnews.com/news/anthropic-ipo-nasdaq-debut-claude-ai/" target="_blank" rel="noopener">Anthropic: рекордное IPO на фоне распродажи в секторе</a></h4>
+      <div class="tags">
+        <span class="tag is-medium">Влияние: среднее</span>
+        <span class="tag is-mixed">Смешанно: + Anthropic, ранние инвесторы; − прочие ИИ-бумаги (отток капитала)</span>
+        <span class="tag">Масштаб: <b>Сектор</b></span>
+        <span class="tag">Сюрприз: <b>да, цена выше диапазона</b></span>
+        <span class="tag is-against-trend">Против тренда сектора</span>
+        <span class="tag is-confirmed">Подтверждено</span>
+      </div>
+      <p class="facts">(Размещение 18.11, торги с 19.11.) Anthropic разместилась на Nasdaq (тикер ANT) по 83 $ за акцию — выше диапазона 70–78 $ — и увеличила объём до 980 млн акций; привлечено 81,3 млрд $ (Forbes). В первый день акции открылись на 111,50 $ и закрылись на 97,17 $ (+17%), капитализация около 1,8 трлн $. CNBC связывал последующую распродажу в ИИ-секторе в том числе с фиксацией прибыли после размещения.</p>
+      <div class="estimate">
+        <span class="label">Оценка · сигнал для сектора</span>
+        <p>Крупнейшее размещение изымает ликвидность из уже купленных ИИ-бумаг: фонды продают Nvidia и производителей чипов, чтобы купить новый актив. Спрос на сделку показывает, что аппетит к ИИ не исчез, но смещается от «железа» к моделям; ближайшие недели покажут, выдержит ли бумага общий спад в секторе.</p>
+      </div>
+      <div class="src">Источник: <a href="https://www.cbsnews.com/news/anthropic-ipo-nasdaq-debut-claude-ai/" target="_blank" rel="noopener">CBS News</a>, <a href="https://www.forbes.com/sites/fionariley/2026/11/19/anthropic-ipo-live-nasdaq-futures-jump-2-ahead-of-record-stock-debut/" target="_blank" rel="noopener">Forbes</a></div>
+    </article>
+  </section>
+
+  <section id="regions">
+    <h2><span class="n">06</span>По регионам</h2>
+    <div class="regions">
+      <div class="region">
+        <div class="rname">США</div>
+        <ul>
+          <li id="us-futures-bounce">Фьючерсы в воскресенье вечером отскочили: S&amp;P 500 +1,99% до 7 073, Nasdaq 100 +2,80% до 25 830; за прошлую неделю Nasdaq потерял 10% — максимум с марта 2020. <a href="https://www.cnbc.com/2026/11/22/stock-market-today-live-updates.html" target="_blank" rel="noopener">↗</a></li>
+        </ul>
+      </div>
+      <div class="region">
+        <div class="rname">Китай и Гонконг</div>
+        <ul>
+          <li id="cn-hk-midday">К полудню Hang Seng −0,64% (22 267), Hang Seng Tech −1,09%; Shanghai Composite −0,96%, STAR 50 −2,65%, ChiNext +1,22%. Alibaba −1,44% после иска американских акционеров. <a href="https://news.futunn.com/en/post/1005307855/hong-kong-stock-market-midday-review-hang-seng-index-falls" target="_blank" rel="noopener">↗</a></li>
+        </ul>
+      </div>
+      <div class="region">
+        <div class="rname">Еврозона</div>
+        <ul>
+          <li id="eu-week">STOXX 600 завершил худшую неделю с марта (−5,8%), под давлением ASML и Infineon; DAX −7,3% за неделю. <a href="https://mlq.ai/news/european-stocks-close-down-2-to-cap-their-worst-week-since-march-as-asml-and-infineon-slump/" target="_blank" rel="noopener">↗</a></li>
+        </ul>
+      </div>
+      <div class="region">
+        <div class="rname">Япония</div>
+        <ul>
+          <li id="jp-holiday">Биржи Японии 23.11 закрыты (праздник); золото утром отыгрывает часть потерь и торгуется выше 3 550 $. <a href="https://www.fxstreet.com/news/gold-recovers-above-3-550-as-ai-trade-concern-spurs-safe-haven-flows-202611230109" target="_blank" rel="noopener">↗</a></li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <section id="big-picture">
+    <h2><span class="n">07</span>Общая картина</h2>
+    <div class="bigpicture">
+      <div class="label">Интерпретация, не факты</div>
+      <p>Рынок переходит от сценария «инфляция и повышения ставок» к сценарию «финансовый шок бьёт по росту». Распродажа в ИИ-секторе, сомнения в отчётности Nvidia и сильный доллар ужесточают условия быстрее, чем это делает ФРС, и через эффект богатства и капекс могут охладить спрос уже в первом квартале 2027 года. Инфляция пока не ослабла: базовый PCE ожидается около 3,2% г/г, нефть дороже 90 $, поэтому ФРС, скорее всего, всё равно повысит ставку в декабре, но с более осторожным сигналом. Главные риски недели — горячий PCE на фоне падающих рынков или дальнейший обвал ИИ-бумаг после отчётов HPE и Dell.</p>
+      <div class="shifts">
+        <span class="tag shift is-down">Рост: риски вниз</span>
+        <span class="tag shift is-flat">Инфляция: без изменений</span>
+        <span class="tag shift is-down">Ставки: меньше повышений</span>
+      </div>
+    </div>
+  </section>
+
+  <section id="outlook">
+    <h2><span class="n">08</span>Календарь</h2>
+
+    <div class="day">
+      <h3>Сегодня · Пн 23.11</h3>
+      <ul class="events">
+        <li class="is-normal">
+          <div class="time">10:00</div>
+          <div>
+            <div class="ev">EZ · Предварительный композитный PMI HCOB, ноябрь</div>
+            <div class="cons">Консенсус: <span class="num">51,9</span> · пред.: <span class="num">51,7</span></div>
+            <div class="why">Первый срез деловой активности за ноябрь: покажет, начал ли шок на рынках и сильный доллар сказываться на экономике еврозоны перед декабрьским заседанием ЕЦБ. <a href="https://www.byteseu.com/2540106/" target="_blank" rel="noopener">↗</a></div>
+          </div>
+        </li>
+        <li class="is-normal">
+          <div class="time">15:45</div>
+          <div>
+            <div class="ev">US · Предварительный композитный PMI S&amp;P Global, ноябрь</div>
+            <div class="cons">Консенсус: <span class="num">55,6</span> · пред.: <span class="num">55,9</span></div>
+            <div class="why">Индикатор того, держится ли рост в США; компонент цен важен для декабрьского решения ФРС. <a href="https://www.pmi.spglobal.com/Public/Home/PDF/UK_Rel_Dates" target="_blank" rel="noopener">↗</a></div>
+          </div>
+        </li>
+        <li class="is-key">
+          <div class="time">23:00</div>
+          <div>
+            <div class="ev">US · Hewlett Packard Enterprise, отчёт за 4-й кв. 2026 ф.г.</div>
+            <div class="cons">Ожидание: в фокусе спрос на ИИ-серверы и прогноз на 2027 ф.г.</div>
+            <div class="why">Первая проверка ИИ-«железа» после обвала Nvidia: слабый прогноз усилит распродажу в секторе. <a href="https://finance.yahoo.com/markets/stocks/articles/dell-hpe-were-ai-winners-140429773.html" target="_blank" rel="noopener">↗</a></div>
+          </div>
+        </li>
+      </ul>
+    </div>
+
+    <div class="day">
+      <h3>Вт 24.11</h3>
+      <ul class="events">
+        <li class="is-normal">
+          <div class="time is-session">в течение дня</div>
+          <div>
+            <div class="ev">DE · Индекс делового климата Ifo, ноябрь</div>
+            <div class="cons">Ожидание: седьмой рост подряд, максимум с мая 2023 (Trading Economics)</div>
+            <div class="why">Покажет, отразилась ли распродажа на рынках на настроениях немецкого бизнеса. <a href="https://tradingeconomics.com/calendar?article=29380&amp;g=top&amp;importance=2&amp;startdate=2026-11-20" target="_blank" rel="noopener">↗</a></div>
+          </div>
+        </li>
+        <li class="is-normal">
+          <div class="time is-session">в течение дня</div>
+          <div>
+            <div class="ev">US · Индекс потребительского доверия Conference Board, ноябрь</div>
+            <div class="cons">Ожидание: в фокусе реакция потребителей на падение рынка акций</div>
+            <div class="why">Эффект богатства — главный канал передачи распродажи в потребление. <a href="https://mlq.ai/news/week-ahead-pce-inflation-and-gdp-on-wednesday-thanksgiving-market-closures-and-earnings-from-dell-hpe-and-deere-nov-23-27/" target="_blank" rel="noopener">↗</a></div>
+          </div>
+        </li>
+        <li class="is-normal">
+          <div class="time is-session">после закр.</div>
+          <div>
+            <div class="ev">US · Dell Technologies, квартальный отчёт</div>
+            <div class="cons">Ожидание: в фокусе портфель заказов на ИИ-серверы</div>
+            <div class="why">Вместе с HPE — индикатор устойчивости ИИ-капекса корпоративных клиентов. <a href="https://www.earningswhispers.com/stocks/DELL" target="_blank" rel="noopener">↗</a></div>
+          </div>
+        </li>
+      </ul>
+    </div>
+
+    <div class="day">
+      <h3>Ср 25.11</h3>
+      <ul class="events">
+        <li class="is-key">
+          <div class="time">14:30</div>
+          <div>
+            <div class="ev">US · Базовый ценовой индекс PCE, октябрь, г/г</div>
+            <div class="cons">Консенсус: <span class="num">3,2%</span> · пред.: <span class="num">3,1%</span></div>
+            <div class="why">Последние данные по инфляции перед заседанием ФРС 8–9 декабря; консенсус м/м +0,3%, значение от 0,4% м/м вернёт дискуссию о повышении на 50 б.п. <a href="https://admiralmarkets.com/analytics/traders-blog/pce-inflation-october-2026-preview" target="_blank" rel="noopener">↗</a></div>
+          </div>
+        </li>
+        <li class="is-normal">
+          <div class="time">14:30</div>
+          <div>
+            <div class="ev">US · ВВП за 3-й кв., вторая оценка, кв/кв анн.</div>
+            <div class="cons">Консенсус: <span class="num">3,5%</span> · пред.: <span class="num">3,4%</span></div>
+            <div class="why">Подтвердит силу экономики до рыночного шока; выходит одновременно с PCE и заявками на пособие. <a href="https://continuumeconomics.com/a/3ea53404/preview-due-november-25-us-preliminary-second-estimate-q3-gdp-even-stronger" target="_blank" rel="noopener">↗</a></div>
+          </div>
+        </li>
+        <li class="is-normal">
+          <div class="time">20:00</div>
+          <div>
+            <div class="ev">US · «Бежевая книга» ФРС</div>
+            <div class="cons">Ожидание: в фокусе ценовое давление и спрос в регионах</div>
+            <div class="why">Последний обзор региональных условий перед декабрьским решением; протокола ФРС на этой неделе нет. <a href="https://mlq.ai/news/week-ahead-pce-inflation-and-gdp-on-wednesday-thanksgiving-market-closures-and-earnings-from-dell-hpe-and-deere-nov-23-27/" target="_blank" rel="noopener">↗</a></div>
+          </div>
+        </li>
+      </ul>
+    </div>
+
+    <div class="day">
+      <h3>Чт 26.11</h3>
+      <ul class="events">
+        <li class="is-normal">
+          <div class="time is-session">в течение дня</div>
+          <div>
+            <div class="ev">KR · Решение Банка Кореи по ставке</div>
+            <div class="cons">Ожидание: повышение на 25 б.п. до 3,25% (Citi, Morgan Stanley)</div>
+            <div class="why">Тест, готовы ли ЦБ ужесточать политику на фоне обвала рынков и стабфонда. <a href="https://www.koreatimes.co.kr/economy/20261019/bok-poised-to-hold-rates-as-november-hike-remains-in-view" target="_blank" rel="noopener">↗</a></div>
+          </div>
+        </li>
+        <li class="is-normal">
+          <div class="time is-session">в течение дня</div>
+          <div>
+            <div class="ev">EZ · Отчёт ЕЦБ об октябрьском заседании; саммит лидеров еврозоны по преемнику Лагард (26–27.11)</div>
+            <div class="cons">Ожидание: в фокусе готовность к повышению ставки в декабре и кандидатуры на пост президента ЕЦБ</div>
+            <div class="why">Определит ожидания по ставкам ЕЦБ на 2027 год и курс евро. <a href="https://www.caixinglobal.com/2026-11-21/the-week-ahead-nov-23-29-ecb-succession-and-opec-oil-talks-102507365.html" target="_blank" rel="noopener">↗</a></div>
+          </div>
+        </li>
+        <li class="is-normal">
+          <div class="time is-session">в течение дня</div>
+          <div>
+            <div class="ev">US · День благодарения — биржи закрыты; в пятницу 27.11 сокращённая сессия</div>
+            <div class="cons">Ожидание: низкая ликвидность</div>
+            <div class="why">Тонкий рынок усиливает колебания на фоне распродажи. <a href="https://mlq.ai/news/week-ahead-pce-inflation-and-gdp-on-wednesday-thanksgiving-market-closures-and-earnings-from-dell-hpe-and-deere-nov-23-27/" target="_blank" rel="noopener">↗</a></div>
+          </div>
+        </li>
+      </ul>
+    </div>
+
+    <div class="day">
+      <h3>Пт 27.11</h3>
+      <ul class="events">
+        <li class="is-normal">
+          <div class="time is-session">в течение дня</div>
+          <div>
+            <div class="ev">FR, ES · Предварительная инфляция, ноябрь</div>
+            <div class="cons">Ожидание: в фокусе вклад энергии после снижения нефти</div>
+            <div class="why">Первые данные по инфляции в крупных экономиках еврозоны перед декабрьским заседанием ЕЦБ. <a href="https://www.caixinglobal.com/2026-11-21/the-week-ahead-nov-23-29-ecb-succession-and-opec-oil-talks-102507365.html" target="_blank" rel="noopener">↗</a></div>
+          </div>
+        </li>
+      </ul>
+    </div>
+
+    <div class="day">
+      <h3>Вс 29.11</h3>
+      <ul class="events">
+        <li class="is-key">
+          <div class="time is-session">выходные</div>
+          <div>
+            <div class="ev">OPEC+ · Встречи министров по добыче на 2027 год</div>
+            <div class="cons">Ожидание: в фокусе квоты на 2027 год на фоне войны с Ираном и прогноза профицита</div>
+            <div class="why">Определит направление нефти и инфляционных ожиданий на начало года. <a href="https://whbl.com/2026/11/22/oil-prices-fall-amid-equity-selloff-though-iran-war-attacks-limit-losses/" target="_blank" rel="noopener">↗</a></div>
+          </div>
+        </li>
+      </ul>
+    </div>
+  </section>
+
+</main>
+
+<footer class="wrap">
+  <p>Метки «Оценка» и «Интерпретация» — аналитическое мнение, отделённое от фактов. «По данным СМИ» и «Слухи» — не подтверждено первоисточником.</p>
+  <p>Время везде берлинское.</p>
+</footer>
+
+</body>
+</html>
